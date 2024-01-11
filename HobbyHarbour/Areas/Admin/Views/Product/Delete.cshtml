@@ -1,0 +1,85 @@
+﻿@{
+    Layout = "_AdminLayout";
+}
+@model Product
+@{
+    ViewData["Title"] = "Delete Product";
+}
+
+
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title text-center">Delete Product</h2>
+            <input type="hidden" asp-for="ProductID" />
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <tr>
+                    <th>Product Name:</th>
+                    <td>@Html.DisplayFor(model => model.ProductName)</td>
+                </tr>
+                <tr>
+                    <th>Description:</th>
+                    <td>@Html.DisplayFor(model => model.Description)</td>
+                </tr>
+                <tr>
+                    <th>Price:</th>
+                    <td>@Html.DisplayFor(model => model.Price)</td>
+                </tr>
+                <tr>
+                    <th>Stock Quantity:</th>
+                    <td>@Html.DisplayFor(model => model.StockQuantity)</td>
+                </tr>
+                <tr>
+                    <th>Category:</th>
+                    <td>@Html.DisplayFor(model => model.CategoryID)</td>
+                </tr>
+
+                <input type="hidden" asp-for="IsDeleted" value="" />
+
+            </table>
+
+            <!-- Button to trigger the modal -->
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
+                Delete
+            </button>
+
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal Dialog -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom:10px;">Are you sure you want to delete this Product?</p>
+                <p style="margin-bottom:10px;"><strong>@Html.DisplayFor(model => model.ProductName)</strong></p>
+                <p style="margin-bottom:10px;">@Html.DisplayFor(model => model.Description)</p>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Cancel</button>
+                    </div>
+                    <div class="col-md-6">
+                        <form asp-action="DeleteConfirmed" asp-route-id="@Model.ProductID" method="post">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-danger btn-block">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

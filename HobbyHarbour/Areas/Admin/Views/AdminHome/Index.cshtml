@@ -1,0 +1,39 @@
+﻿@{
+    Layout = "_AdminLayout";
+}
+@model List<ApplicationUser>
+
+<h2 class="text-center">User List</h2>
+
+<div class="container">
+   
+    <table class="table table-bordered table-striped" style="background-color: #e6cfe2; margin-top: 10px; ">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.UserName</td>
+                    <td>@user.Email</td>
+                    <td>@(user.LockoutEnd == null ? "Active" : "Blocked")</td>
+                    <td>
+                        @if (user.LockoutEnd == null)
+                        {
+                            <a asp-action="Block" asp-route-id="@user.Id" class="btn btn-primary">Block</a>
+                        }
+                        else
+                        {
+                            <a asp-action="Unblock" asp-route-id="@user.Id" class="btn btn-primary">Unblock</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

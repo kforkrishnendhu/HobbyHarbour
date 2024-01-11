@@ -1,0 +1,79 @@
+﻿@model List<OrderItem>
+
+@{
+    ViewData["Title"] = "Order Management";
+    Layout = "_AdminLayout";
+}
+
+<style>
+    .custom-link {
+        color: #007bff; /* Set link color to Bootstrap's primary color */
+        text-decoration: underline; /* Add underline for better visibility */
+        cursor: pointer; /* Change cursor to indicate it's a clickable link */
+    }
+
+        .custom-link:hover {
+            color: #0056b3; /* Change color on hover for a subtle effect */
+        }
+</style>
+
+<div class="container">
+
+    <form method="get" action="@Url.Action("Index")">
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label for="status">Order Status:</label>
+                <select class="form-control" id="status" name="status" style="background-color: #e6cfe2;">
+                    <option value="">All</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Confirmed">Confirmed</option>
+                    <option value="Shipped">Shipped</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="Cancelled">Cancelled</option>
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="startDate">Start Date:</label>
+                <input type="date" class="form-control" id="startDate" name="startDate" style="background-color: #e6cfe2;">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="endDate">End Date:</label>
+                <input type="date" class="form-control" id="endDate" name="endDate" style="background-color: #e6cfe2;">
+            </div>
+            <div class="form-group col-md-2">
+                <br />
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </div>
+    </form>
+    @if (Model.Count > 0)
+    {
+        <table class="table table-bordered mt-4" style="background-color: #e6cfe2; margin-top: 10px; ">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Order Status</th>
+                    <th>Order Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.ActionLink(order.OrderID.ToString(), "OrderDetails", new { orderID = order.OrderID }, new { @class = "custom-link" })
+                        </td>
+                        <td>@order.OrderStatus</td>
+                        <td>@order.Order.OrderDate.ToShortDateString()</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p style="border: 2px solid #ddd; text-align: center; margin:70px;">No Orders.</p>
+    }
+</div>
+
+

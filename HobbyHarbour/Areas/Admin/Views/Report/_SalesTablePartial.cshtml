@@ -1,0 +1,46 @@
+﻿@model HobbyHarbour.ViewModels.SalesIndexViewModel
+@using System.Globalization
+
+@{
+    var cultureInfo = new CultureInfo("en-IN"); // Change "en-IN" to your desired culture
+    var formatInfo = cultureInfo.NumberFormat;
+}
+@if (Model.Orders.Count > 0)
+{
+    <table id="salesTable" class="table table-bordered mt-4" style="background-color: #e6cfe2; margin-top: 10px; ">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Order Date</th>
+                <th>Total Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model.Orders)
+            {
+                <tr>
+                    <td>@order.OrderID</td>
+                    <td>@order.OrderDate.ToString("yyyy-MM-dd")</td>
+                    <td>@order.TotalAmount.ToString("C", formatInfo)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <!-- Display pagination controls -->
+    <div class="text-center">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                @for (int i = 1; i <= Model.PageInfo.TotalPages; i++)
+                {
+                    <li class="page-item @(i == Model.PageInfo.CurrentPage ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("SalesReport", new { page = i })">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+}
+else
+{
+    <p style="border: 2px solid #ddd; text-align: center; margin:30px;">No Data.</p>
+}

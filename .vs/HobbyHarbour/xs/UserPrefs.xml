@@ -1,0 +1,51 @@
+﻿<Properties StartupConfiguration="{6D0C90FD-5492-488A-9026-CE6B43B9799A}|Default">
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/Users/krishnendhuarun/BroCamp/BCR04/Week11/Projects/HobbyHarbour/HobbyHarbour/Service/WalletService.cs" relfile="HobbyHarbour/Service/WalletService.cs" line="18" column="1" />
+      <Breakpoint file="/Users/krishnendhuarun/BroCamp/BCR04/Week11/Projects/HobbyHarbour/HobbyHarbour/Areas/Customer/Controllers/CustomerOrderController.cs" relfile="HobbyHarbour/Areas/Customer/Controllers/CustomerOrderController.cs" line="64" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.HobbyHarbour PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="HobbyHarbour/appsettings.json">
+    <Files>
+      <File FileName="HobbyHarbour/Areas/Customer/Controllers/CustomerAccountController.cs" />
+      <File FileName="HobbyHarbour/Areas/Customer/Views/CustomerAccount/Wallet.cshtml" />
+      <File FileName="HobbyHarbour/Models/Payment.cs" />
+      <File FileName="HobbyHarbour/Models/OrderItem.cs" />
+      <File FileName="HobbyHarbour/Models/Wallet.cs" />
+      <File FileName="HobbyHarbour/Areas/Customer/Controllers/CustomerOrderController.cs" />
+      <File FileName="HobbyHarbour/Service/WalletService.cs" />
+      <File FileName="HobbyHarbour/Data/ApplicationDbContext.cs" />
+      <File FileName="HobbyHarbour/Service/IWalletService.cs" />
+      <File FileName="HobbyHarbour/Controllers/HomeController.cs" />
+      <File FileName="HobbyHarbour/Program.cs" />
+      <File FileName="HobbyHarbour/Areas/Customer/Controllers/CouponController.cs" />
+      <File FileName="HobbyHarbour/Areas/Admin/Controllers/CouponController.cs" />
+      <File FileName="HobbyHarbour/Areas/Admin/Views/AdminHome/Index.cshtml" />
+      <File FileName="HobbyHarbour/Areas/Admin/Views/Dashboard/Dashboard.cshtml" />
+      <File FileName="HobbyHarbour/Areas/Admin/Views/Order/OrderDetails.cshtml" />
+      <File FileName="HobbyHarbour/Areas/Admin/Views/Order/Index.cshtml" />
+      <File FileName="HobbyHarbour/Areas/Admin/Views/Coupon/Index.cshtml" />
+      <File FileName="HobbyHarbour/Areas/Admin/Views/Report/SalesReport.cshtml" />
+      <File FileName="HobbyHarbour/appsettings.json" Line="14" Column="5" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="HobbyHarbour" expanded="True" selected="True">
+            <Node name="HobbyHarbour">
+              <Node name="Areas" expanded="True">
+                <Node name="Customer" expanded="True">
+                  <Node name="Controllers" expanded="True" />
+                </Node>
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+</Properties>

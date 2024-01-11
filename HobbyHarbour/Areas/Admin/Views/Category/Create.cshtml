@@ -1,0 +1,54 @@
+﻿@{
+    Layout = "_AdminLayout";
+}
+
+@model Category
+
+@{
+    ViewData["Title"] = "Create Category";
+}
+
+<div class="container">
+    <h2 class="text-center">Create New Category</h2>
+
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="CategoryName" class="control-label">Category Name</label>
+            <input asp-for="CategoryName" class="form-control" />
+            <span asp-validation-for="CategoryName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Description" class="control-label">Description</label>
+            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        @*<div class="form-group">
+            <label asp-for="ImgUrl" class="control-label">Category Image</label>
+            <input asp-for="ImgUrl" type="file" name="categoryImage" class="form-control" />
+            <span asp-validation-for="ImgUrl" class="text-danger"></span>
+        </div>*@
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Create</button>
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+    </form>
+
+    <div class="">
+
+    </div>
+</div>
+
+
+@*For client side validation we have inbuilt script file*@
+@*//////////*@
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+}

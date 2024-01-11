@@ -1,0 +1,262 @@
+﻿@{
+    Layout = "_Layout";
+}
+@model List<Product>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<style type="text/css">
+    /* Style for the modal container */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    }
+
+    /* Style for the modal content */
+    .modal-content {
+        background-color: #fff;
+        margin: 10% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 70%;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        position: relative;
+    }
+
+    /* Style for the close button */
+    .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    /* Style for the input field and button */
+    input[type="tel"] {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    button {
+        background-color: #fb531ae0; /* Blue button color */
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #fb211ae0; /* Darker blue on hover */
+        }
+
+   
+</style>
+
+<!-- HTML for the OTP modal -->
+<div id="otpModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Enter Your Phone Number</h2>
+        <input type="tel" id="phoneNumber" placeholder="Phone Number">
+        <button onclick="requestOTP()">Request OTP</button>
+    </div>
+</div>
+
+<!-- HTML for the OTP entry modal -->
+<div id="otpEntryModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeOTPEntryModal()">&times;</span>
+        <h3>Enter OTP</h3>
+        <input style="margin-top: 10px;" type="text" id="otp" placeholder="Enter OTP">
+        <p style="font-size:20px; margin-top:10px;" id="timer"></p>
+        <div style="display: flex; justify-content: center; margin-top: 10px;">
+            <button id="verifyOTP" onclick="verifyOTP()">Verify OTP</button>
+            <button id="resendOTP" onclick="resendOTP()" style="display: none;">Resend OTP</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Add a variable to store the timer interval
+    var timerInterval;
+
+    function startTimer(duration, display) {
+        var timer = duration, minutes, seconds;
+        timerInterval = setInterval(function () {
+            minutes = parseInt(timer / 60, 10);
+            seconds = parseInt(timer % 60, 10);
+
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            display.textContent = minutes + ":" + seconds;
+
+            if (--timer < 0) {
+                // Timer expired, show the "Resend OTP" button
+                clearInterval(timerInterval);
+                document.getElementById("resendOTP").style.display = "block";
+                document.getElementById("verifyOTP").style.display = "none";
+
+                document.getElementById("timer").textContent = " ";
+            }
+        }, 1000);
+    }
+
+    // JavaScript to control the modal
+    function openModal() {
+         var isAuthenticated = @User.Identity.IsAuthenticated.ToString().ToLower();
+
+        // Open the modal only if the user is not authenticated
+        if (!isAuthenticated) {
+            var modal = document.getElementById("otpModal");
+            modal.style.display = "block";
+        }
+    }
+
+    function closeModal() {
+        var modal = document.getElementById("otpModal");
+        modal.style.display = "none";
+    }
+
+    function openOTPEntryModal() {
+        var otpModal = document.getElementById("otpModal");
+        otpModal.style.display = "none";
+
+        var otpEntryModal = document.getElementById("otpEntryModal");
+        otpEntryModal.style.display = "block";
+
+        // Start the timer when the OTP entry modal is opened
+        var duration = 30; // Set the timer duration in seconds
+        var display = document.getElementById("timer");
+        startTimer(duration, display);
+    }
+
+    function closeOTPEntryModal() {
+        // Clear the timer interval when the OTP entry modal is closed
+        clearInterval(timerInterval);
+
+        var otpEntryModal = document.getElementById("otpEntryModal");
+        otpEntryModal.style.display = "none";
+
+        var otpModal = document.getElementById("otpModal");
+        otpModal.style.display = "block";
+    }
+
+    function resendOTP() {
+        // Reset the timer and hide the "Resend OTP" button
+        document.getElementById("timer").textContent = "00:30";
+        document.getElementById("resendOTP").style.display = "none";
+        document.getElementById("verifyOTP").style.display = "block";
+
+        var phoneNumber = document.getElementById("phoneNumber").value;
+
+        // Make an AJAX request to your server to request an OTP
+        $.ajax({
+            type: "POST",
+            url: "/Home/OTPLogin",
+            data: { phoneNumber: phoneNumber },
+            success: function (response) {
+                if (response.success) {
+                    // Handle OTP verification success
+                    openOTPEntryModal();
+                } else {
+                    // Handle OTP verification failure
+                    alert("Error: " + response.message);
+                    // You can show an error message or handle it as needed.
+                }
+                closeModal();
+            },
+            error: function (error) {
+                // Handle error
+                alert("Error sending OTP: " + error.responseText);
+            }
+        });
+    }
+
+    function requestOTP() {
+        var phoneNumber = document.getElementById("phoneNumber").value;
+
+        // Make an AJAX request to your server to request an OTP
+        $.ajax({
+            type: "POST",
+            url: "/Home/OTPLogin",
+            data: { phoneNumber: phoneNumber },
+            success: function (response) {
+                if (response.success) {
+                    // Handle OTP verification success
+                    openOTPEntryModal();
+                } else {
+                    // Handle OTP verification failure
+                    alert("Error: " + response.message);
+                    // You can show an error message or handle it as needed.
+                }
+                closeModal();
+            },
+            error: function (error) {
+                // Handle error
+                alert("Error sending OTP: " + error.responseText);
+            }
+        });
+    }
+
+    function verifyOTP() {
+        var enteredOTP = document.getElementById("otp").value;
+        var phoneNumber = document.getElementById("phoneNumber").value;
+
+        // Make an AJAX request to your server to verify the entered OTP
+        $.ajax({
+            type: "POST",
+            url: "/Home/VerifyOTP",
+            data: { enteredOTP: enteredOTP, phoneNumber: phoneNumber },
+            success: function (response) {
+                if (response.success) {
+                    // Handle OTP verification success
+                    alert("OTP verified successfully.");
+                    window.location.href = '/Customer/CustomerHome/Index';
+                } else {
+                    // Handle OTP verification failure
+                    alert("Error: " + response.message);
+                    // You can show an error message or handle it as needed.
+                }
+                closeOTPEntryModal();
+            },
+            error: function (error) {
+                // Handle OTP verification error
+                alert("Error verifying OTP: " + error.responseText);
+                console.error(error);  // Log the error to the console for more details
+                closeOTPEntryModal();
+            }
+        });
+    }
+
+    window.onload = openModal;
+
+    //// Check if the modal has been opened
+    //var isModalOpened = localStorage.getItem('isModalOpened');
+
+    //// If the modal hasn't been opened, execute the function and set the flag
+    //if (!isModalOpened) {
+    //    window.onload = function () {
+    //        openModal();
+    //        // Set the flag to indicate that the modal has been opened
+    //        localStorage.setItem('isModalOpened', true);
+    //    };
+    //}
+</script>

@@ -1,0 +1,185 @@
+﻿@{
+    Layout = "_Layout";
+}
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<style type="text/css">
+    /* Style for the modal container */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    }
+
+    /* Style for the modal content */
+    .modal-content {
+        background-color: #fff;
+        margin: 10% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 70%;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        position: relative;
+    }
+
+    /* Style for the close button */
+    .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    /* Style for the input field and button */
+    input[type="tel"] {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    button {
+        background-color: #fb531ae0; /* Blue button color */
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #fb211ae0; /* Darker blue on hover */
+        }
+</style>
+
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<!-- HTML for the OTP modal -->
+<div id="otpModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Enter Your Phone Number</h2>
+        <input type="tel" id="phoneNumber" placeholder="Phone Number">
+        <button onclick="requestOTP()">Request OTP</button>
+    </div>
+</div>
+
+<!-- HTML for the OTP entry modal -->
+<div id="otpEntryModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeOTPEntryModal()">&times;</span>
+        <h2>Enter OTP</h2>
+        <input type="text" id="otp" placeholder="Enter OTP">
+        <button onclick="verifyOTP()">Verify OTP</button>
+    </div>
+</div>
+
+<script>
+    // JavaScript to control the modal
+    function openModal() {
+         var isAuthenticated = @User.Identity.IsAuthenticated.ToString().ToLower();
+
+        // Open the modal only if the user is not authenticated
+        if (!isAuthenticated) {
+            var modal = document.getElementById("otpModal");
+            modal.style.display = "block";
+        }
+    }
+
+    function closeModal() {
+        var modal = document.getElementById("otpModal");
+        modal.style.display = "none";
+    }
+
+    function openOTPEntryModal() {
+        var otpModal = document.getElementById("otpModal");
+        otpModal.style.display = "none";
+
+        var otpEntryModal = document.getElementById("otpEntryModal");
+        otpEntryModal.style.display = "block";
+    }
+
+    function closeOTPEntryModal() {
+        var otpEntryModal = document.getElementById("otpEntryModal");
+        otpEntryModal.style.display = "none";
+
+        var otpModal = document.getElementById("otpModal");
+        otpModal.style.display = "block";
+    }
+
+    function requestOTP() {
+        var phoneNumber = document.getElementById("phoneNumber").value;
+
+        // Make an AJAX request to your server to request an OTP
+        $.ajax({
+            type: "POST",
+            url: "/Home/OTPLogin",
+            data: { phoneNumber: phoneNumber },
+            success: function (response) {
+                if (response.success) {
+                    // Handle OTP verification success
+                    openOTPEntryModal();
+                } else {
+                    // Handle OTP verification failure
+                    alert("Error: " + response.message);
+                    // You can show an error message or handle it as needed.
+                }
+                closeModal();
+            },
+            error: function (error) {
+                // Handle error
+                alert("Error sending OTP: " + error.responseText);
+            }
+        });
+    }
+
+    function verifyOTP() {
+        var enteredOTP = document.getElementById("otp").value;
+        var phoneNumber = document.getElementById("phoneNumber").value;
+
+        // Make an AJAX request to your server to verify the entered OTP
+        $.ajax({
+            type: "POST",
+            url: "/Home/VerifyOTP",
+            data: { enteredOTP: enteredOTP, phoneNumber: phoneNumber },
+            success: function (response) {
+                if (response.success) {
+                    // Handle OTP verification success
+                    alert("OTP verified successfully.");
+                    window.location.href = '/Customer/CustomerHome/Index';
+                } else {
+                    // Handle OTP verification failure
+                    alert("Error: " + response.message);
+                    // You can show an error message or handle it as needed.
+                }
+                closeOTPEntryModal();
+            },
+            error: function (error) {
+                // Handle OTP verification error
+                alert("Error verifying OTP: " + error.responseText);
+                console.error(error);  // Log the error to the console for more details
+                closeOTPEntryModal();
+            }
+        });
+    }
+
+    // Open the modal on page load
+    window.onload = openModal;
+</script>

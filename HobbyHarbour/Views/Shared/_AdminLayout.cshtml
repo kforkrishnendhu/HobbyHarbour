@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="~/bootstrapTemplate/images/icons/favicon.png" />
+    <title>@ViewData["Title"] - HobbyHarbour</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="~/bootstrapTemplate/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/bootstrapTemplate/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <!-- Custom styles for this template -->
+    <link href="~/bootstrapTemplate/css/style.css" rel="stylesheet">
+    <link href="~/bootstrapTemplate/fonts/antonio-exotic/stylesheet.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/bootstrapTemplate/css/lightbox.min.css">
+    <link href="~/bootstrapTemplate/css/responsive.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+    <div id="page">
+        <!---header top---->
+        <div class="top-header" style="background: linear-gradient(to left, #805c85, #dfb0d470); none repeat scroll 0 0; ">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div id="logo">
+                            <!--<a href="index.html"><img src="images/logo.png" alt="logo"></a>-->
+                            <a class="navbar-brand" asp-area="Admin" asp-controller="AdminHome" asp-action="Index"><span style=" color: #66406c; font-size: 45px; font-family: sans-serif;">HobbyHarbour</span></a>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <header class="header-container">
+                            <div class="container">
+                                <div class="top-row">
+                                    <div class="row">
+                                        @*<div class="col-md-2 col-sm-6 col-xs-6">
+
+                                        </div>*@
+                                        @*<div class="col-sm-6 visible-sm">
+                                            <div class="text-right"><button type="button" class="book-now-btn">Book Now</button></div>
+                                        </div>*@
+                                        <div class="col-md-12 col-sm-12 col-xs-12 remove-padd">
+                                            <nav class="navbar navbar-default">
+                                                <div class="navbar-header page-scroll">
+                                                    <button data-target=".navbar-ex1-collapse" data-toggle="collapse" class="navbar-toggle" type="button">
+                                                        <span class="sr-only">Toggle navigation</span>
+                                                        <span class="icon-bar"></span>
+                                                        <span class="icon-bar"></span>
+                                                        <span class="icon-bar"></span>
+                                                    </button>
+
+                                                </div>
+                                                <div class="collapse navigation navbar-collapse navbar-ex1-collapse remove-space">
+                                                    <ul class="list-unstyled nav1 cl-effect-10">
+                                                        <li><a data-hover="Dashboard" class="nav-link text-dark @(ViewContext.RouteData.Values["Action"].ToString() == "Dashboard" && ViewContext.RouteData.Values["Controller"].ToString() == "Dashboard" && ViewContext.RouteData.Values["Area"].ToString() == "Admin" ? "active" : "")" asp-area="Admin" asp-controller="Dashboard" asp-action="Dashboard"><span>Dashboard</span></a></li>
+                                                        <li><a data-hover="Users" class="nav-link text-dark @(ViewContext.RouteData.Values["Action"].ToString() == "Index" && ViewContext.RouteData.Values["Controller"].ToString() == "AdminHome" && ViewContext.RouteData.Values["Area"].ToString() == "Admin" ? "active" : "")" asp-area="Admin" asp-controller="AdminHome" asp-action="Index"><span>Users</span></a></li>
+                                                        <li><a data-hover="Category" class="nav-link text-dark @(ViewContext.RouteData.Values["Action"].ToString() == "Index" && ViewContext.RouteData.Values["Controller"].ToString() == "Category" && ViewContext.RouteData.Values["Area"].ToString() == "Admin" ? "active" : "")" asp-area="Admin" asp-controller="Category" asp-action="Index"><span>Category</span></a></li>
+                                                        <li><a data-hover="Product" class="nav-link text-dark @(ViewContext.RouteData.Values["Action"].ToString() == "Index" && ViewContext.RouteData.Values["Controller"].ToString() == "Product" && ViewContext.RouteData.Values["Area"].ToString() == "Admin" ? "active" : "")" asp-area="Admin" asp-controller="Product" asp-action="Index"><span>Product</span></a></li>
+                                                        <li><a data-hover="Orders" class="nav-link text-dark @(ViewContext.RouteData.Values["Action"].ToString() == "Index" && ViewContext.RouteData.Values["Controller"].ToString() == "Order" && ViewContext.RouteData.Values["Area"].ToString() == "Admin" ? "active" : "")" asp-area="Admin" asp-controller="Order" asp-action="Index"><span>Orders</span></a></li>
+                                                        <li><a data-hover="Coupon" class="nav-link text-dark @(ViewContext.RouteData.Values["Action"].ToString() == "Index" && ViewContext.RouteData.Values["Controller"].ToString() == "Coupon" && ViewContext.RouteData.Values["Area"].ToString() == "Admin" ? "active" : "")" asp-area="Admin" asp-controller="Coupon" asp-action="Index"><span>Coupon</span></a></li>
+                                                        <li><a data-hover="Sales Report" class="nav-link text-dark @(ViewContext.RouteData.Values["Action"].ToString() == "SalesReport" && ViewContext.RouteData.Values["Controller"].ToString() == "Report" && ViewContext.RouteData.Values["Area"].ToString() == "Admin" ? "active" : "")" asp-area="Admin" asp-controller="Report" asp-action="SalesReport"><span>Sales Report</span></a></li>
+
+                                                        <li>
+                                                            <a data-hover="Logout" class="nav-link text-dark">
+                                                                <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/Home/Index">
+                                                                    <button id="logout" type="submit"><span>Logout</span></button>
+                                                                </form>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+
+                                                </div>
+                                            </nav>
+                                        </div>
+                                        <!--<div class="col-md-2  col-sm-4 col-xs-12 hidden-sm">-->
+                                            @*<div class="text-right"><button type="button" class="book-now-btn">Book Now</button></div>*@
+                                        <!--</div>-->
+                                    </div>
+                                </div>
+                            </div>
+                        </header>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--header--->
+       
+
+        <!--end-->
+        @*<div class="clearfix"></div>*@
+
+
+        @*<section class="about-block">*@
+        <div class="container" style="padding-top:20px;">
+            @RenderBody()
+            <div class="clearfix"> </div>
+        </div>
+        @*</section>*@
+
+        <!---footer--->
+        <footer style="background: linear-gradient(to left, #805c85, #dfb0d470); none repeat scroll 0 0; ">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3 col-sm-6 col-xs-12 width-set-50">
+                        <div class="footer-details">
+                            <h4>Get in touch</h4>
+                            <ul class="list-unstyled footer-contact-list">
+                                <li>
+                                    <i class="fa fa-map-marker fa-lg"></i>
+                                    <p>HobbyHarbour private ltd.</p>
+                                    <p>Near Lulu Conventional centre</p>
+                                    <p>Thrissur</p>
+                                </li>
+                                <li>
+                                    <i class="fa fa-phone fa-lg"></i>
+                                    <p><a href="tel:+91-9876542354"> +91-9876542354</a></p>
+                                </li>
+                                <li>
+                                    <i class="fa fa-envelope-o fa-lg"></i>
+                                    <p><a href="mailto:hobbyharbour@info.com"> hobbyharbour@info.com</a></p>
+                                </li>
+                            </ul>
+                            <div class="footer-social-icon">
+                                <a href="#"><i class="fa fa-facebook"></i></a>
+                                <a href="#"><i class="fa fa-twitter"></i></a>
+                                <a href="#"><i class="fa fa-instagram"></i></a>
+                                <a href="#"><i class="fa fa-google-plus"></i></a>
+                                <a href="#"><i class="fa fa-youtube-play"></i></a>
+                            </div>
+                            <div class="input-group" id="subscribe">
+                                <input type="text" class="form-control subscribe-box" value="" name="subscribe" placeholder="EMAIL ID">
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn subscribe-button"><i class="fa fa-paper-plane fa-lg"></i></button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-12 width-50 width-set-50">
+                        <div class="footer-details">
+                            <h4>Explore</h4>
+                            <ul class="list-unstyled footer-links">
+                                <li><a href="#">Home</a></li>
+                                <li><a href="#">About</a></li>
+                                <li> <a href="#">Contact</a></li>
+                                <li><a href="#">Track your order</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12 col-xs-12">
+                        <div class="footer-details">
+                            <h4>Consumer policy</h4>
+                            <ul class="list-unstyled footer-links">
+                                <li><a href="#">Cancellation &Aacute; Returns</a></li>
+                                <li><a href="#">Terms of use</a></li>
+                                <li> <a href="#">Security</a></li>
+                                <li><a href="#">Privacy</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="copyright">
+                    &copy; 2023 - HobbyHarbour - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                </div>
+
+            </div>
+        </footer>
+
+        <!--back to top--->
+        <a style="display: none;" href="javascript:void(0);" class="scrollTop back-to-top" id="back-to-top">
+            <span><i aria-hidden="true" class="fa fa-angle-up fa-lg"></i></span>
+            <span>Top</span>
+        </a>
+
+    </div>
+    <script src="~/bootstrapTemplate/js/jquery.min.js" type="text/javascript"></script>
+    <script src="~/bootstrapTemplate/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="~/bootstrapTemplate/js/lightbox-plus-jquery.min.js" type="text/javascript"></script>
+    <script src="~/bootstrapTemplate/js/instafeed.min.js" type="text/javascript"></script>
+    <script src="~/bootstrapTemplate/js/custom.js" type="text/javascript"></script>
+
+    @*<script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>*@
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+

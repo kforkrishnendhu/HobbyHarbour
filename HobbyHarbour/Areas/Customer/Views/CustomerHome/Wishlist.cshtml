@@ -1,0 +1,92 @@
+﻿@{
+    Layout = "_CustomerLayout";
+}
+@model List<WishlistItem>
+
+    <style>
+
+        .item {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s;
+        }
+
+            .item:hover {
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Increase the shadow on hover */
+                background-color: #e3d4e6;
+            }
+    </style>
+
+<div class="row">
+    @if (Model.Count > 0)
+    {
+        <div class="col-md-8">
+
+            <table class="table" style="background: #e6cfe2; border: none;">
+                <tbody>
+                    <tr>
+                        <td colspan="3">
+                            <h3>My Wishlist(@Model.Count)</h3>
+                        </td>
+                    </tr>
+
+                    @foreach (var item in Model)
+                    {
+                       
+                        <tr class="item">
+                            <td style="vertical-align: middle;">
+                                <a href="@Url.Action("Details", "CustomerHome", new { id = item.ProductID })" class="order-link">
+
+                                    <div class="row">
+                                        <div class="col-3">
+                                            @if (item.Product.Images != null && item.Product.Images.Any())
+                                            {
+                                               <img src="@item.Product.Images.FirstOrDefault().ImageUrl" class="img-fluid" alt="Product Image" style="max-width: 100px; padding:10px;">
+                                            }
+                                            else
+                                            {
+                                                <!-- Default image or placeholder when no images are available -->
+                                                <img src="~/productImages/images/placeholder.png" id="show-img" class="card-img-top">
+                                            }
+                                            
+                                        </div>
+
+                                    </div>
+                                </a>
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <a href="@Url.Action("Details", "CustomerHome", new { id = item.ProductID })" class="order-link">
+
+                                    <div style="margin-bottom:5px;">
+                                        <strong> @item.Product.ProductName </strong>
+                                    </div>
+                                    <div style="margin-bottom:10px;">
+                                        @item.Product.Category.CategoryName
+                                    </div>
+                                    <div>
+                                        <strong> $@(item.Product.Price) </strong>
+                                    </div>
+                                </a>
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <div>
+                                    <a class="btn btn-danger btn-sm" asp-action="RemoveFromWishlist" asp-route-productId="@item.Product.ProductID">
+                                        <i class="fa fa-trash"></i> Remove
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr style="border-top: 1px solid #ccc;"></tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+
+    }
+    else
+    {
+        <p style="border: 2px solid #ddd; text-align: center; margin:10px;">Your wishlist is empty.</p>
+    }
+</div>
+
+

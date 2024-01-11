@@ -1,0 +1,90 @@
+﻿@model List<Coupon>
+@{
+    ViewData["Title"] = "Active Coupons";
+    Layout = "_CustomerLayout";
+}
+
+@using System.Globalization
+<style>
+    .coupon-list {
+        margin-top:10px;
+        list-style: none;
+        padding: 0;
+    }
+
+    .coupon-item {
+        background-color: #e6cfe2;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        padding: 15px;
+    }
+
+        .coupon-item:nth-child(even) {
+            background-color: #e3e3e3;
+        }
+
+    .coupon-details {
+        margin-bottom: 10px;
+    }
+
+    .coupon-code {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .discount-type {
+        font-style: italic;
+    }
+
+    .discount-value {
+        font-weight: bold;
+        color: #3498db;
+    }
+
+    .expiry-date {
+        color: #e74c3c;
+    }
+</style>
+
+<div class="container">
+    <h2>Active Coupons</h2>
+
+    @if (Model.Count > 0)
+    {
+        <ul class="coupon-list">
+            @foreach (var coupon in Model)
+            {
+                <a href="@Url.Action("Index", "Products")">
+                <li class="coupon-item">
+                    <div class="coupon-details">
+                        <span class="coupon-code">Code: @coupon.Code</span>
+                        <br />
+                        <span class="discount-type">Discount Type: @coupon.DiscountType</span>
+                        <br />
+                        <span class="discount-value">
+                            Discount Value: @if (coupon.DiscountType == DiscountType.Percentage)
+                            {
+                                @coupon.DiscountValue<span>%</span>
+                            }
+                            else
+                            {
+                                var cultureInfo = new CultureInfo("en-IN");
+                                var formatInfo = cultureInfo.NumberFormat;
+                                @coupon.DiscountValue.ToString("C", formatInfo)
+                            }
+                        </span>
+                        <br />
+                        <span class="expiry-date">Expiry Date: @coupon.ExpiryDate.ToShortDateString()</span>
+                    </div>
+                </li>
+                </a>
+
+            }
+        </ul>
+    }
+    else
+    {
+        <p style="border: 2px solid #ddd; text-align: center; margin:10px;">No active coupons available.</p>
+    }
+</div>

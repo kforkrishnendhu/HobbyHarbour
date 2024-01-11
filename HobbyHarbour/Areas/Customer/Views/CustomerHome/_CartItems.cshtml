@@ -1,0 +1,114 @@
+﻿@model List<Cart>
+
+<style>
+    .pad{
+        padding:10px;
+    }
+    .item {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s;
+    }
+        .item:hover {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Increase the shadow on hover */
+            background-color: #e6cfe2;
+        }
+</style>
+
+<div class="row">
+    @if (Model.Count > 0)
+    {
+        <div class="col-md-8">
+
+            <table class="table" style="background: #e6cfe2; border: none;">
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="item">
+                            <td style="vertical-align: middle;">
+                                <div class="row">
+                                    <div class="col-3">
+                                        @if (item.Product.Images != null && item.Product.Images.Any())
+                                        {
+                                            <img src="@item.Product.Images.FirstOrDefault().ImageUrl" class="img-fluid pad" alt="Product Image" style="max-width: 100px;">
+                                        }
+                                        else
+                                        {
+                                            <!-- Default image or placeholder when no images are available -->
+                                            <img src="~/productImages/images/placeholder.png" id="show-img" class="card-img-top">
+                                        }
+
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="d-flex align-items-center pad">
+                                            <button class="btn btn-primary btn-sm quantity-minus" data-product-id="@item.Product.ProductID">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+
+                                            <input id="quantity-@item.Product.ProductID" min="0" name="quantity" value="@item.Quantity" type="number" class="form-control" style="display:inline; max-width:25%;" />
+
+                                            <button class="btn btn-primary btn-sm quantity-plus" data-product-id="@item.Product.ProductID">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </div>
+                                       
+                                            @if (item.Product.StockQuantity <= item.Quantity)
+                                            {
+                                                <div class="alert alert-danger" role="alert">
+                                                    Insufficient stock quantity for the selected product.
+                                                </div>
+                                            }
+                                       
+
+
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <div>
+                                    <strong> @item.Product.ProductName </strong>
+                                </div>
+                                <div>
+                                    @item.Product.Category.CategoryName
+                                </div>
+                                <div>
+                                    <strong> $@(item.Quantity * item.Product.Price) </strong>
+                                </div>
+                                <div class="d-flex">
+                                    <a class="btn btn-danger btn-sm" asp-action="RemoveFromCart" asp-route-productId="@item.Product.ProductID">
+                                        <i class="fa fa-trash"></i> Remove
+                                    </a>
+                                    <a class="btn btn-info btn-sm ml-2" asp-action="AddToWishlist" asp-route-productId="@item.Product.ProductID">
+                                        <i class="fa fa-heart"></i> Wishlist
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr style="border-top: 1px solid #ccc;"></tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+        <div class="col-md-4">
+            <div class="card pad" style="background: #e6cfe2;">
+                <div class="card-body pad">
+                    <h3 class="card-title text-center">Price Details</h3>
+                    <p>Total Items: @Model.Count</p>
+                    <p>Total Price:<span class="text-right"> $@(Model.Sum(item => (decimal)(item.Quantity * item.Product.Price)))</span></p>
+                    <p>Delivery Charge: $10.00</p>
+                    <hr>
+                    <h4>Total Amount: $@(Model.Sum(item => (decimal)(item.Quantity * item.Product.Price)) + 10.00M)</h4>
+                </div>
+                <hr>
+                <div class="text-center pad">
+                    <a asp-area="Customer" asp-controller="Checkout" asp-action="Checkout" class="btn btn-primary btn-lg" id="placeOrderButton">Proceed to Checkout</a>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <p style="border: 2px solid #ddd; text-align: center; margin:10px;">Your shopping cart is empty.</p>
+    }
+</div>
+

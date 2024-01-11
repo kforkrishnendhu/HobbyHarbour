@@ -1,0 +1,105 @@
+﻿<!-- Views/Admin/SalesReport.cshtml -->
+
+@model HobbyHarbour.ViewModels.SalesIndexViewModel
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Sales Report";
+    Layout = "_AdminLayout";
+}
+
+<!-- Example: Compatible versions -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" />
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+
+<style>
+
+    .pad {
+        padding: 8px 20px;
+        background-color: #e6cfe2;
+    }
+</style>
+<h2 class="text-center mb-4">Sales Report</h2>
+
+<form method="get">
+    <div class="form-row" style="padding:20px;">
+        <div class="form-group col-md-4">
+            <label for="selectedYear">Select Year:</label>
+            <select class="pad" id="selectedYear" name="selectedYear">
+                @for (int year = DateTime.Now.Year; year >= 2020; year--)
+                {
+                    <option value="@year" selected="@(Model.SelectedYear == year)">
+                        @year
+                    </option>
+                }
+            </select>
+
+
+
+
+        </div>
+        <div class="form-group col-md-4">
+            <label for="selectedMonth">Select Month:</label>
+            <select class="pad" id="selectedMonth" name="selectedMonth">
+                @for (int month = 1; month <= 12; month++)
+                {
+                    <option value="@month" selected="@{ if(Model.SelectedMonth == month) { <text>selected</text>; } }">
+                        @CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month)
+                    </option>
+                }
+            </select>
+        </div>
+        <div class="form-group col-md-4">
+            <button style="padding: 8px 20px;" class="btn btn-primary" type="submit">Apply Filters</button>
+        </div>
+    </div>
+</form>
+@if (Model.Orders.Count > 0)
+{
+    <div class="mt-3" style="margin-top:10px;">
+        <a asp-action="DownloadPdf" asp-controller="Report" class="btn btn-primary">Download PDF</a>
+        <a asp-action="DownloadExcel" asp-controller="Report" class="btn btn-success">Download Excel</a>
+    </div>
+    <div id="salesData">
+        @Html.Partial("_SalesTablePartial", Model)
+    </div>
+   
+
+}
+else
+{
+    <p style="border: 2px solid #ddd; text-align: center; margin:30px;">No Data.</p>
+}
+
+
+<script>
+        $(document).ready(function () {
+            // Event handler for year dropdown change
+            $("#selectedYear, #selectedMonth").change(function () {
+                loadData();
+            });
+
+            // Function to load data via AJAX
+            function loadData() {
+                var selectedYear = $("#selectedYear").val();
+                var selectedMonth = $("#selectedMonth").val();
+
+                // Make an AJAX request to fetch data based on selectedYear and selectedMonth
+                $.ajax({
+                    url: "@Url.Action("SalesReport", "Report")", // Replace with your actual controller action
+                    data: { selectedYear: selectedYear, selectedMonth: selectedMonth },
+                    type: "GET",
+                    success: function (result) {
+                        // Update the table with the new data
+                        $("#salesData").html(result);
+                        // Update the pagination controls
+                        $(".pagination").html($(".pagination", result).html());
+                    },
+                    error: function (error) {
+                        console.error("Error loading data: " + error);
+                    }
+                });
+            }
+        });
+</script>

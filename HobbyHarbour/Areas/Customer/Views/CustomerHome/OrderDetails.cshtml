@@ -1,0 +1,206 @@
+﻿@{
+    Layout = "_CustomerLayout";
+}
+@model OrderItem
+@using System.Globalization
+
+<style>
+
+    /* List styles */
+    .order-tracking {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        justify-content: space-between;
+        /*        overflow-x: auto;*/
+        white-space: nowrap;
+    }
+
+        /* Step styles */
+        .order-tracking li {
+            text-align: center;
+            flex: 1;
+        }
+
+    /* Icon styles */
+    .step-icon {
+        display: inline-block;
+        background-color: #e1e7ec;
+        padding: 10px;
+        border-radius: 50%;
+        font-size: 24px;
+        color: #374250;
+    }
+
+    /* Title styles */
+    .step-title {
+        margin-top: 10px;
+        margin-bottom: 0;
+        color: #606975;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .highlighted-step {
+        background-color: #be83bf;
+        border-radius: 45%;
+        color: #fff;
+    }
+</style>
+
+
+<div class="container">
+    <div class="row" style="margin-bottom: 10px; background-color: #e6cfe2;">
+        <div class="col-md-6" style="border-right: double; border-color:white; padding: 24px">
+            <!-- Delivery Address Section -->
+            <section class="delivery-address">
+                <h4 style="margin-bottom: 10px"><strong>Delivery Address</strong></h4>
+                <p>@Html.Raw(Model.Order.ShippingAddress.Replace(",", "<br>"))</p>
+            </section>
+        </div>
+        <div class="col-md-6" style="padding: 24px">
+            <!-- Invoice Download Section -->
+            <section class="invoice-download">
+                <h4 style="margin-bottom: 10px"><strong>More Actions</strong></h4>
+            </section>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 10px; background-color: #e6cfe2;">
+        <div class="col" style="padding: 24px">
+            <!-- Order Item Details Section -->
+            <section class="order-details">
+
+                <!-- Display Order Item Image, Details, and Order Tracking -->
+                <div class="order-item">
+                    <div class="row" style="margin-bottom: 10px">
+                        <div class="col-md-1 text-center">
+                            @if (@Model.Product.Images != null && Model.Product.Images.Any())
+                            {
+                                <img src="@Model.Product.Images.FirstOrDefault().ImageUrl" style="max-width: 50px; max-height: 50px;" class="img-fluid" alt="Product Image">
+                            }
+                            else
+                            {
+                                <!-- Default image or placeholder when no images are available -->
+                                <img src="~/productImages/images/placeholder.png" id="show-img" class="card-img-top">
+                            }
+
+                        </div>
+                        <div class="col-md-4">
+                            <h5 style="margin-bottom: 10px"><strong>@Model.Product.ProductName</strong></h5>
+                            <p style="margin-bottom: 10px">@Model.Product.Description</p>
+                            @{
+                                var cultureInfo = new CultureInfo("en-IN"); // Change "en-IN" to your desired culture
+                                var formatInfo = cultureInfo.NumberFormat;
+                            }
+                            <p><strong>@Model.TotalPrice.ToString("C", formatInfo)</strong></p>
+                        </div>
+                        <div class="col-md-7">
+                            <ul class="order-tracking">
+                                <li class="step-item @(Model.OrderStatus.ToString() == "Confirmed" ? "highlighted-step" : "")">
+                                    <span class="step-icon">&#10004;</span>
+                                    <p class="step-title">Confirmed</p>
+                                </li>
+                                <li class="step-item @(Model.OrderStatus.ToString() == "Shipped" ? "highlighted-step" : "")">
+                                    <span class="step-icon">&#128666;</span>
+                                    <p class="step-title">Shipped</p>
+                                </li>
+                                <li class="step-item @(Model.OrderStatus.ToString() == "Delivered" ? "highlighted-step" : "")">
+                                    <span class="step-icon">&#128230;</span>
+                                    <p class="step-title">Delivered</p>
+                                </li>
+                                <li class="step-item @(Model.OrderStatus.ToString() == "Cancelled" ? "highlighted-step" : "")">
+                                    <span class="step-icon">&#10060;</span>
+                                    <p class="step-title">Cancelled</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            @if (Model.OrderStatus.ToString() != "Delivered" && Model.OrderStatus.ToString() != "Cancelled" && Model.OrderStatus.ToString() != "Returned")
+                            {
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">
+                                    Cancel
+                                </button>
+                            }
+                            @if (Model.OrderStatus.ToString() == "Delivered")
+                            {
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#returnModal">
+                                    Return
+                                </button>
+                            }
+                        </div>
+                        <div class="col-md-6">
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+
+<!--Cancel Modal Dialog -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom:10px;">Are you sure you want to cancel this order?</p>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Cancel</button>
+                    </div>
+                    <div class="col-md-6">
+                        <form asp-action="CancelOrder" asp-controller="CustomerOrder" asp-route-id="@Model.OrderItemID" method="post">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-danger btn-block">Confirm</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--Return Modal Dialog -->
+<div class="modal fade" id="returnModal" tabindex="-1" role="dialog" aria-labelledby="returnModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="returnModalLabel">Confirm Return</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom:10px;">Are you sure you want to return this order?</p>
+            </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Cancel</button>
+                    </div>
+                    <div class="col-md-6">
+                        <form asp-action="ReturnOrder" asp-controller="CustomerOrder" asp-route-id="@Model.OrderItemID" method="post">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-danger btn-block">Return</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

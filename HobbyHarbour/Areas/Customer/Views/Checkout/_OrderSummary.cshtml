@@ -1,0 +1,110 @@
+﻿@model List<Cart>
+
+<div class="row">
+    @if (Model.Count > 0)
+    {
+        <div class="col-md-8">
+
+            <table class="table table-hover" style="background: #f5f5f5; border: none;">
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td style="vertical-align: middle;">
+                                <div class="row">
+                                    <div class="col-3">
+                                        @if (item.Product.Images != null && item.Product.Images.Any())
+                                        {
+                                            <img src="@item.Product.Images.FirstOrDefault().ImageUrl" class="img-fluid" alt="Product Image" style="max-width: 100px;">
+                                        }
+                                        else
+                                        {
+                                            <!-- Default image or placeholder when no images are available -->
+                                            <img src="~/productImages/images/placeholder.png" id="show-img" class="card-img-top">
+                                        }
+
+                                    </div>
+                                    @*<div class="col-9">
+                                        <div class="d-flex align-items-center">
+                                            <button class="btn btn-primary btn-sm quantity-minus" data-product-id="@item.Product.ProductID">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+
+                                            <input id="quantity-@item.Product.ProductID" min="0" name="quantity" value="@item.Quantity" type="number" class="form-control" style="display:inline; width:12%;" />
+
+                                            <button class="btn btn-primary btn-sm quantity-plus" data-product-id="@item.Product.ProductID">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>*@
+                                </div>
+                            </td>
+                            <td style="vertical-align: middle;">
+                                <div>
+                                    <strong> @item.Product.ProductName </strong>
+                                </div>
+                                <div>
+                                    @item.Product.Category.CategoryName
+                                </div>
+                                <div>
+                                    <strong> $@(item.Quantity * item.Product.Price) </strong>
+                                </div>
+                                @*<div class="d-flex">
+                                    <a class="btn btn-danger btn-sm" asp-action="RemoveFromCart" asp-route-productId="@item.Product.ProductID">
+                                        <i class="fa fa-trash"></i> Remove
+                                    </a>
+                                </div>*@
+                            </td>
+                        </tr>
+                        <tr style="border-top: 1px solid #ccc;"></tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    }
+    else
+    {
+        <p>Your shopping cart is empty.</p>
+    }
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>// Function to update cart item quantity
+    function updateCartQuantity(productId, quantity) {
+        $.ajax({
+            url: "/Customer/CustomerHome/UpdateCartQuantity",
+            type: "POST",
+            data: { productId: productId, quantity: quantity },
+            success: function (data) {
+                // Update the cart items section with the new content
+                $("#cart-items").html(data);
+
+                // Reattach the event handlers
+                attachEventHandlers();
+            }
+        });
+    }
+
+    function attachEventHandlers() {
+        // Attach click handlers to plus and minus buttons
+        $(".quantity-minus").click(function () {
+            var productId = $(this).data("product-id");
+            var currentQuantity = parseInt($("#quantity-" + productId).val());
+            if (currentQuantity > 1) {
+                updateCartQuantity(productId, currentQuantity - 1);
+                // window.location.reload();
+            }
+        });
+
+        $(".quantity-plus").click(function () {
+            var productId = $(this).data("product-id");
+            var currentQuantity = parseInt($("#quantity-" + productId).val());
+            updateCartQuantity(productId, currentQuantity + 1);
+        });
+    }
+
+    $(document).ready(function () {
+        attachEventHandlers(); // Attach event handlers initially
+    });</script>
+

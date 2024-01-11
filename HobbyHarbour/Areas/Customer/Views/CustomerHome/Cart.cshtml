@@ -1,0 +1,77 @@
+﻿@{
+    Layout = "_CustomerLayout";
+}
+@model List<Cart>
+
+<div class="container">
+
+    <div id="cart-items">
+        <!-- Render cart items as a partial view -->
+        @Html.Partial("_CartItems", Model)
+    </div>
+
+   
+</div>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>// Function to update cart item quantity
+        function updateCartQuantity(productId, quantity) {
+            $.ajax({
+                url: "/Customer/CustomerHome/UpdateCartQuantity",
+                type: "POST",
+                data: { productId: productId, quantity: quantity },
+                success: function (data) {
+                    // Update the cart items section with the new content
+                    $("#cart-items").html(data);
+
+                    // Reattach the event handlers
+                    attachEventHandlers();
+                }
+            });
+        }
+
+        function attachEventHandlers() {
+            // Attach click handlers to plus and minus buttons
+            $(".quantity-minus").click(function () {
+                var productId = $(this).data("product-id");
+                var currentQuantity = parseInt($("#quantity-" + productId).val());
+                if (currentQuantity > 1) {
+                    updateCartQuantity(productId, currentQuantity - 1);
+                   // window.location.reload();
+                }
+            });
+
+            $(".quantity-plus").click(function () {
+                var productId = $(this).data("product-id");
+                var currentQuantity = parseInt($("#quantity-" + productId).val());
+                updateCartQuantity(productId, currentQuantity + 1);
+            });
+        }
+
+        $(document).ready(function () {
+            attachEventHandlers(); // Attach event handlers initially
+        });
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

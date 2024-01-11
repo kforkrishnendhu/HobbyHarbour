@@ -1,0 +1,48 @@
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    var isAdmin = User.IsInRole("Admin");
+    var isCustomer = User.IsInRole("Customer");
+
+    @if (isCustomer)
+    {
+        <li><a data-hover="Products" class="nav-link text-dark" asp-area="Customer" asp-controller="Products" asp-action="Index"><span>Products</span></a></li>
+
+    }
+    @if (isAdmin)
+    {
+        <li><a data-hover="Dashboard" class="nav-link text-dark" asp-area="Admin" asp-controller="Dashboard" asp-action="Dashboard"><span>Dashboard</span></a></li>
+
+    }
+
+        var userFirstName = UserManager.GetUserAsync(User)?.Result?.FirstName;
+   
+
+    <li>
+        <a id="manage" data-hover="Hello @userFirstName!" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+            <span>Hello @userFirstName!</span>
+        </a>
+    </li>
+    <li>
+        <a id="logoutForm" data-hover="Logout" class="nav-link text-dark">
+            <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button id="logout" type="submit"><span>Logout</span></button>
+            </form>
+        </a>
+    </li>
+
+
+}
+else
+{
+    <li><a id="register" data-hover="Register" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register"><span>Register</span></a></li>
+    <li><a id="login" data-hover="Login" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login"><span>Login</span></a></li>
+    <li><a id="otpLogin" data-hover="OTP Login" class="nav-link text-dark" asp-controller="Home" asp-action="OtpLogin"><span>OTP Login</span></a></li>
+
+
+
+}

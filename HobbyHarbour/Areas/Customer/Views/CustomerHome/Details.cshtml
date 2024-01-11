@@ -1,0 +1,106 @@
+﻿@{
+    Layout = "_CustomerLayout";
+}
+@model Product
+
+@{
+    ViewData["Title"] = "Product Details";
+}
+<link rel="stylesheet" type="text/css" href="~/productImages/style.css">
+<style type="text/css">
+    .product-image {
+        max-width: 100%; /* This will make the image responsive */
+        max-height: 300px; /* Set a maximum height for the image */
+        width: auto; /* Ensures that the image scales proportionally */
+        display: block; /* Removes extra spacing around the image */
+        margin: 0 auto; /* Centers the image horizontally */
+    }
+
+
+    .product-details {
+        margin-top: 20px; /* Add margin at the top of the product details */
+    }
+
+    .product-name {
+        margin-bottom: 10px; /* Add margin at the bottom of the product name */
+    }
+
+    .product-heading {
+        margin-bottom: 20px; /* Add margin at the bottom of the heading */
+    }
+</style>
+
+@{
+    bool itemAddedToCart = TempData["ItemAddedToCart"] as bool? ?? false;
+    bool insufficientStock = TempData["InsufficientStock"] as bool? ?? false;
+}
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-6 product-details">
+            <div class="show" href="1.jpg">
+                @if (Model.Images != null && Model.Images.Any())
+                {
+                    <img src="@Model.Images[0].ImageUrl" id="show-img" class="product-image">
+                }
+                else
+                {
+                    <!-- Default image or placeholder when no images are available -->
+                    <img src="~/productImages/images/placeholder.png" id="show-img" class="product-image">
+                }
+            </div>
+
+            <!-- Secondary carousel image thumbnail gallery -->
+
+            <div class="small-img">
+                <img src="~/productImages/images/next-icon.png" class="icon-left" alt="" id="prev-img">
+                <div class="small-container">
+                    <div id="small-img-roll">
+                        <div class="small-img">
+                            @foreach (var image in Model.Images)
+                            {
+                                <img src="@image.ImageUrl" class="show-small-img" alt="">
+                            }
+                        </div>
+                        </div>
+                </div>
+                <img src="~/productImages/images/next-icon.png" class="icon-right" alt="" id="next-img">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h3 class="product-name">@Model.ProductName</h3>
+            <p class="product-name">@Model.Description</p>
+            <p class="product-name">Price: $@Model.Price</p>
+            <p class="product-name">Category: @Model.Category.CategoryName</p>
+            @if (insufficientStock)
+            {
+                <div class="alert alert-danger" role="alert">
+                    Insufficient stock! Please choose a lower quantity.
+                </div>
+            }
+            <form asp-action="AddToCart" method="post" asp-route-productId="@Model.ProductID">
+                <div class="form-group">
+                    <label for="quantity" class="product-name">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity" class="form-control product-name" value="1" min="1">
+                </div>
+                @if (itemAddedToCart)
+                {
+                    <button type="submit" class="btn btn-primary btn-lg btn-block" name="action" value="GoToCart">Go to Cart</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-primary btn-lg btn-block" name="action" value="AddToCart">Add to Cart</button>
+                }
+
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT"
+        crossorigin="anonymous"></script>
+<script src="~/productImages/scripts/zoom-image.js"></script>
+<script src="~/productImages/scripts/main.js"></script>

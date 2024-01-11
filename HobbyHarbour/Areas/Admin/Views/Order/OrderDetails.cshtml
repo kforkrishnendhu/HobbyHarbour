@@ -1,0 +1,129 @@
+﻿
+@model OrderItem
+
+@{
+    ViewData["Title"] = "Order Details";
+    Layout = "_AdminLayout";
+}
+<style>
+
+    /* List styles */
+    .order-tracking {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        justify-content: space-between;
+        /*        overflow-x: auto;*/
+        white-space: nowrap;
+    }
+
+        /* Step styles */
+        .order-tracking li {
+            text-align: center;
+            flex: 1;
+        }
+
+    /* Icon styles */
+    .step-icon {
+        display: inline-block;
+        background-color: #e1e7ec;
+        padding: 10px;
+        border-radius: 50%;
+        font-size: 24px;
+        color: #374250;
+    }
+
+    /* Title styles */
+    .step-title {
+        margin-top: 10px;
+        margin-bottom: 0;
+        color: #606975;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .highlighted-step {
+        background-color: #be83bf;
+        border-radius: 45%;
+        color: #fff;
+    }
+    .underline{
+        text-decoration:underline;
+        color:blue;
+    }
+</style>
+
+
+<div class="container">
+    <div class="row" style="margin-bottom: 10px; background-color: #e6cfe2;">
+        <div class="col-md-6" style="border-right: double; border-color:white; padding: 24px">
+            <p style="margin-bottom: 10px"><strong>Order ID:</strong> @Model.OrderID</p>
+            <p style="margin-bottom: 10px"><strong>Order Status:</strong> @Model.OrderStatus</p>
+            <p style="margin-bottom: 10px"><strong>Order Date:</strong> @Model.Order.OrderDate.ToShortDateString()</p>
+
+            <div class="col-md-2 text-center">
+                @if (@Model.Product.Images != null && Model.Product.Images.Any())
+                {
+                    <img src="@Model.Product.Images.FirstOrDefault().ImageUrl" style="max-width: 60px; max-height: 60px;" class="img-fluid" alt="Product Image">
+                }
+                else
+                {
+                    <!-- Default image or placeholder when no images are available -->
+                    <img src="~/productImages/images/placeholder.png" id="show-img" class="card-img-top">
+                }
+
+            </div>
+            <div class="col-md-4">
+                <h5 style="margin-bottom: 10px"><strong>@Model.Product.ProductName</strong></h5>
+                <p style="margin-bottom: 10px"><strong>Quantity:</strong> @Model.Quantity</p>
+                <p style="margin-bottom: 10px"><strong>Price:</strong> @Model.Product.Price</p>
+                <!-- Add more order item details as needed -->
+            </div>
+
+
+        </div>
+        <div class="col-md-6" style="padding: 24px">
+            <!-- Delivery Address Section -->
+            <section class="delivery-address">
+                <h4 style="margin-bottom: 10px"><strong>Delivery Address</strong></h4>
+                <p>@Html.Raw(Model.Order.ShippingAddress.Replace(",", "<br>"))</p>
+            </section>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 10px; background-color: #e6cfe2;">
+        <div class="col" style="padding: 24px">
+
+            <form asp-action="UpdateOrderStatus" method="post" class="mt-4">
+                <input type="hidden" name="orderID" value="@Model.OrderID" />
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="newStatus">New Order Status:</label>
+                        <select class="form-control" name="newStatus">
+                            @if (Model.OrderStatus.ToString() == "Confirmed" || Model.OrderStatus.ToString() == "Shipped")
+                            {
+                                <option value="Shipped">Shipped</option>
+                                <option value="Delivered">Delivered</option>
+                                <option value="Cancelled">Cancelled</option>
+                            }
+                            else
+                            {
+                                <option value="" disabled>Select an option</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <br />
+                @if (Model.OrderStatus.ToString() == "Confirmed" || Model.OrderStatus.ToString() == "Shipped")
+                {
+                    <button type="submit" class="btn btn-primary">Update Status</button>
+                }
+            </form>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 10px; background-color: #e6cfe2;">
+        <a asp-action="Index" class="btn btn-secondary underline">Back to List</a>
+    </div>
+</div>
+
+
+

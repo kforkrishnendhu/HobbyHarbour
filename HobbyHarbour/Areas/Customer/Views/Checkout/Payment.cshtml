@@ -1,0 +1,65 @@
+﻿@{
+    Layout = "_CustomerLayout";
+}
+@model MerchantOrder
+
+<button id="RzP_btn" hidden>Pay</button>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+
+    var merchantOrderDataJson = '@Html.Raw(ViewData["MerchantOrderData"])';
+    var merchantOrderData = JSON.parse(merchantOrderDataJson);
+    console.log(merchantOrderData);
+
+var options = {
+    "key": merchantOrderData.RazorpayKey, // Enter the Key ID generated from the Dashboard
+    "amount": merchantOrderData.Amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+    "currency": merchantOrderData.Currency,
+    "name": merchantOrderData.Name,
+    "description": merchantOrderData.Description,
+    "image": "https://avatars.githubusercontent.com/u/65504583?v=4", // You can give your logo url
+    "order_id": merchantOrderData.RazorpayOrderId,
+    "handler": function (response) {
+        // After payment successfully made response will come here
+        // Set the data in hidden form
+        document.getElementById('rzp_paymentid').value = response.razorpay_payment_id;
+        document.getElementById('rzp_orderid').value = response.razorpay_order_id;
+
+        document.getElementById('MerchantOrderData').value = merchantOrderDataJson;
+
+        // // Let's submit the form automatically
+        document.getElementById('rzp-paymentresponse').click();
+    },
+    "prefill": {
+        "name": merchantOrderData.Name,
+        "email": merchantOrderData.Email,
+        "contact": merchantOrderData.PhoneNumber
+    },
+    "notes": {
+        "address": merchantOrderData.Address
+    },
+    "theme": {
+        "color": "#F37254"
+    }
+};
+    var rzp1 = new Razorpay(options);
+    //<!-- onload function -->
+    window.onload = function(){
+        document.getElementById('RzP_btn').click();
+    };
+    document.getElementById('RzP_btn').onclick = function(e){
+    rzp1.open();
+    e.preventDefault();
+    }
+
+
+</script>
+<form action="CompleteOrderProcess" method="post" asp-antiforgery="true">
+    <input type="hidden" id="rzp_paymentid" name="rzp_paymentid" />
+    <input type="hidden" id="rzp_orderid" name="rzp_orderid" />
+    <!-- Hidden fields for merchantOrderData -->
+    <input type="hidden" name="MerchantOrderData" id="MerchantOrderData" />
+
+
+    <button type="submit" id="rzp-paymentresponse" class="btn btn-primary hidden">Submit</button>
+</form>

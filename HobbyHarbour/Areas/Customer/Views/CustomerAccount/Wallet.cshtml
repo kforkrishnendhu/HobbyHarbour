@@ -1,0 +1,93 @@
+﻿@model HobbyHarbour.Models.Wallet
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "My Wallet";
+    Layout = "_CustomerLayout";
+}
+
+@{
+    var cultureInfo = new CultureInfo("en-IN"); // Change "en-IN" to your desired culture
+    var formatInfo = cultureInfo.NumberFormat;
+}
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+<!-- Bootstrap JS and Popper.js -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-nvAa0+6ATXzC6VZkud4lXeJ1aY2aK9eQfF9/Z5ZUn2VZYOIV//6v9iM46NFY+ka" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-1A/KDYaaKd5TP2Q6YGGDX4N9aEcgjzfKltxE5q0UbAsjFuCZSmKbSSUnQlmh/jU" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/js/bootstrap.min.js" integrity="sha384-0I/xqD6cfWpOQFr7gGpi2YoGVLZxhMwF5Qa1vo2IqSjI4lOA6F0MIV5KA06jSkXJ" crossorigin="anonymous"></script>
+
+<style>
+    .cardStyle {
+        border: 1px solid #edeff675;
+        padding: 15px;
+        margin-bottom: 20px;
+        background-color: #edeff675;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        margin-top: 10px;
+        border-radius: 14px;
+    }
+</style>
+<div class="container mt-5">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" id="walletDetailsTab" data-toggle="tab" href="#walletDetails">Wallet Details</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="transactionHistoryTab" data-toggle="tab" href="#transactionHistory">Transaction History</a>
+        </li>
+    </ul>
+
+    <div class="tab-content mt-3">
+        <!-- Wallet Details Tab -->
+        <div class="tab-pane fade show active" id="walletDetails">
+            <div class="card mt-3 cardStyle">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p style="margin:10px;"><strong>Wallet ID:</strong> @Model.WalletID</p>
+                            <p style="margin: 10px; font-size: 16px; color: blue;"><strong>Balance:</strong><strong> @Model.Balance.ToString("C", formatInfo)</strong></p>
+                        </div>
+                        <div class="col-md-4">
+                            <p style="margin:10px;"><strong>Full name:</strong> @Model.User.FirstName&nbsp;@Model.User.LastName</p>
+                            <p style="margin:10px;"><strong>Phone number:</strong> @Model.User.PhoneNumber</p>
+                        </div>
+                        <div class="col-md-4">
+
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- Transaction History Tab -->
+        <div class="tab-pane fade" id="transactionHistory">
+            <div class="card mt-3 cardStyle">
+                <div class="card-body" style="padding:10px;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Method</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var history in Model.WalletHistories)
+                            {
+                                <tr>
+                                    <td>@history.Date</td>
+                                    <td>@history.Amount.ToString("C", formatInfo)</td>
+                                    <td>@history.Method</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,66 @@
+﻿@model Coupon
+@{
+    ViewData["Title"] = "Create Coupon";
+    Layout = "_AdminLayout";
+}
+
+<div class="container">
+
+    <form asp-action="Create" method="post">
+        <div class="form-group">
+            <label asp-for="Code" class="control-label">Coupon Code</label>
+            <input asp-for="Code" class="form-control" />
+            <span asp-validation-for="Code" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="DiscountType" class="control-label">Discount Type</label>
+            <select asp-for="DiscountType" class="form-control">
+                <option value="Percentage">Percentage</option>
+                <option value="FixedAmount">Fixed Amount</option>
+            </select>
+            <span asp-validation-for="DiscountType" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="DiscountValue" class="control-label">Discount Value</label>
+            <input asp-for="DiscountValue" class="form-control" />
+            <span asp-validation-for="DiscountValue" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="MinimumCartAmount" class="control-label">Minimum Cart Amount</label>
+            <input asp-for="MinimumCartAmount" class="form-control" />
+            <span asp-validation-for="MinimumCartAmount" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="MaximumCartAmount" class="control-label">Maximum Cart Amount</label>
+            <input asp-for="MaximumCartAmount" class="form-control" />
+            <span asp-validation-for="MaximumCartAmount" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ExpiryDate" class="control-label">Expiry Date</label>
+            <input asp-for="ExpiryDate" type="date" class="form-control" />
+            <span asp-validation-for="ExpiryDate" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="UsageLimit" class="control-label">Usage Limit</label>
+            <input asp-for="UsageLimit" class="form-control" type="number" min="1" />
+            <span asp-validation-for="UsageLimit" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="IsActive" class="control-label">Is Active</label>
+            <input asp-for="IsActive" type="checkbox" checked class="form-check" />
+            <span asp-validation-for="IsActive" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-success">Create</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>

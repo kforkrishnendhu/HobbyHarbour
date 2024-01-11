@@ -1,0 +1,71 @@
+﻿@model List<Coupon>
+@{
+    ViewData["Title"] = "Coupon Management";
+    Layout = "_AdminLayout";
+}
+@using System.Globalization
+
+<div class="container">
+
+    <p>
+        <a asp-action="Create" class="btn btn-success">Create New Coupon</a>
+    </p>
+
+    <div class="table-responsive">
+        @if (Model.Count > 0)
+        {
+            <table class="table table-striped" style="margin-top:20px;">
+                <thead style="background-color: #e6cfe2;">
+                    <tr>
+                        <th>ID</th>
+                        <th>Code</th>
+                        <th>Discount Type</th>
+                        <th>Discount Value</th>
+                        <th>Expiry Date</th>
+                        <th>Is Active</th>
+                        <th>Usage Limit</th>
+                        <th>Usage Count</th>
+                        <th>Minimum cart amount</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var coupon in Model)
+                    {
+                        <tr>
+                            <td>@coupon.CouponID</td>
+                            <td>@coupon.Code</td>
+                            <td>@coupon.DiscountType</td>
+                            <td>
+                                @if (coupon.DiscountType == DiscountType.Percentage)
+                                {
+                                    @coupon.DiscountValue<span>%</span>
+                                }
+                                else
+                                {
+                                    var cultureInfo = new CultureInfo("en-IN"); 
+                                    var formatInfo = cultureInfo.NumberFormat;
+                                    @coupon.DiscountValue.ToString("C", formatInfo)
+                                }
+                            </td>
+                            <td>@coupon.ExpiryDate.ToShortDateString()</td>
+                            <td>@(coupon.IsActive ? "Yes" : "No")</td>
+                            <td>@coupon.UsageLimit</td>
+                            <td>@coupon.UsageCount</td>
+                            <td>@coupon.MinimumCartAmount</td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@coupon.CouponID" class="btn btn-primary btn-sm">Edit</a>
+                                <a asp-action="Delete" asp-route-id="@coupon.CouponID" class="btn btn-danger btn-sm">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p style="border: 2px solid #ddd; text-align: center; margin:10px;">No Coupons yet.</p>
+        }
+    </div>
+
+</div>

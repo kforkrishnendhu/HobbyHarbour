@@ -1,0 +1,133 @@
+﻿@model Address
+<form id="editAddressForm-@Model.AddressID" asp-action="SaveEditedAddress" asp-controller="Checkout"
+      data-ajax-update="#edit-address-@Model.AddressID" method="post"
+      data-ajax="true"
+      data-ajax-method="post"
+      data-ajax-complete="onAjaxComplete">
+    <input asp-for="AddressID" type="hidden" />
+    <input asp-for="UserID" type="hidden" />
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <input asp-for="FullName" class="form-control" placeholder="Full Name" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input asp-for="StreetAddress" class="form-control" placeholder="Street Address" />
+                <span asp-validation-for="StreetAddress" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input asp-for="City" class="form-control" placeholder="City" />
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input asp-for="State" class="form-control" placeholder="State" />
+                <span asp-validation-for="State" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input asp-for="PostalCode" class="form-control" placeholder="Postal Code" />
+                <span asp-validation-for="PostalCode" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input asp-for="Country" class="form-control" placeholder="Country" />
+                <span asp-validation-for="Country" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input asp-for="PhoneNumber" class="form-control" placeholder="PhoneNumber" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-secondary cancel-button">Cancel</button>
+    </div>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>$(document).ready(function () {
+        // Handle form submission
+        $('form').submit(function (event) {
+            event.preventDefault();
+
+            var currentForm = $(this);
+
+            // Make an AJAX request to save the edited address
+            $.ajax({
+                type: 'POST',
+                url: currentForm.attr('action'),
+                data: currentForm.serialize(),
+                success: function (response) {
+                    if (response) {
+                        // Replace the content of the specified container with the new HTML
+                        
+                        var updateContainer = $(currentForm.data('ajax-update'));
+                        updateContainer.html(response.html);
+                        updateContainer = $('#deliveryAddressContent');
+                        updateContainer.html(response);
+                        // Hide the edit form container after successful update
+                        //currentForm.parent().hide();
+                    } else {
+                        // Handle failure as needed
+                        alert('Failed to save the edited address.');
+                    }
+                },
+                error: function (response) {
+                    // Handle AJAX error
+                    alert('hai');
+                    var updateContainer = $('.edit-address-container');
+                    updateContainer.html(response);
+                    //var updateContainer = $(currentForm.data('ajax-update'));
+                    //updateContainer.html(response.responseText);
+                }
+            });
+        });
+
+        // Handle the Cancel button click event
+        $('.cancel-button').click(function () {
+            // Hide the edit form container when Cancel is clicked
+            $(this).closest('.edit-address-container').hide();
+        });
+    });
+
+    // Handle the completion of the AJAX request
+    function onAjaxComplete(xhr) {
+        // This function is called after the AJAX request is complete
+        if (xhr.getResponseHeader("Content-Type").indexOf("json") > -1) {
+            // Parse the JSON response
+            var response = JSON.parse(xhr.responseText);
+
+            if (response.success) {
+                // Optional: You can perform additional actions after a successful AJAX request
+                console.log("Address saved successfully!");
+            } else {
+                // Handle failure as needed
+                alert('Failed to save the edited address.');
+            }
+        }
+    }</script>
+
+
+@*<script>// Handle the Cancel button click event
+    $(document).ready(function () {
+        $('.cancel-button').click(function () {
+            // Hide the edit form when Cancel is clicked
+            $(this).closest('form').parent().hide();
+        });
+    });</script>*@
+
+@*For client side validation we have inbuilt script file*@
+@*//////////*@
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+}

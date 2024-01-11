@@ -1,0 +1,209 @@
+﻿@{
+    Layout = "_CustomerLayout";
+}
+@model HobbyHarbour.ViewModels.UserProfileViewModel
+
+<style type="text/css">
+    .input-group .form-control {
+        width: 300px;
+    }
+</style>
+    <div class="container mt-5">
+        <div class="row">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="col-md-6">
+                <h3 class="mb-4">Personal Information</h3>
+                <br />
+                <div class="form-group">
+                    <label for="firstName" class="text-primary">First Name:</label>
+                    <div class="input-group">
+                        <span class="view-mode form-control">@Model.FirstName</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="lastName" class="text-primary">Last Name:</label>
+                    <div class="input-group">
+                        <span class="view-mode form-control">@Model.LastName</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h3 class="mb-4">Contact Information</h3>
+                <br />
+                <div class="form-group">
+                    <label for="email" class="text-primary">Email:</label>
+                    <div class="input-group">
+                        <span class="view-mode form-control">@Model.Email</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="mobile" class="text-primary">Mobile:</label>
+                    <div class="input-group">
+                        <span class="view-mode form-control">@Model.PhoneNumber</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 offset-md-6">
+                <a asp-action="EditProfile" class="btn btn-primary float-end">Edit</a>
+            </div>
+        </div>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--@{
+        Layout = "_CustomerLayout";
+    }-->
+    @*@model ApplicationUser*@
+
+    <!--<style type="text/css">
+        h3 {
+            margin-bottom: 20px; /* Adjust the margin size as needed */
+        }
+
+        .form-group {
+            margin-top: 20px; /* Adjust the margin size as needed */
+        }
+    </style>
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-6">
+                <h3 class="mb-3">Personal Information</h3>
+                <div class="form-group mt-3">
+                    <label for="firstName" class="text-primary">First Name:</label>
+                    <div class="d-flex">
+                        <span class="view-mode">@Model.FirstName</span>
+                        <input type="text" class="edit-mode" id="firstName" value="@Model.FirstName" disabled>
+                        <a href="#" class="btn-primary ms-2 edit-button">Edit</a>
+                        <a href="#" class="btn-success ms-2 save-button" style="display: none;">Save</a>
+                        <a href="#" class="btn-secondary ms-2 cancel-button" style="display: none;">Cancel</a>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="lastName" class="text-primary">Last Name:</label>
+                    <div class="d-flex">
+                        <span class="view-mode">@Model.LastName</span>
+                        <input type="text" class="edit-mode" id="lastName" value="@Model.LastName" disabled>
+                        <a href="#" class="btn-primary ms-2 edit-button">Edit</a>
+                        <a href="#" class="btn-success ms-2 save-button" style="display: none;">Save</a>
+                        <a href="#" class="btn-secondary ms-2 cancel-button" style="display: none;">Cancel</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h3 class="mb-3">Contact Information</h3>
+                <div class="form-group mt-3">
+                    <label for="email" class="text-primary">Email:</label>
+                    <div class="d-flex">
+                        <span class="view-mode">@Model.Email</span>
+                        <input type="text" class="edit-mode" id="email" value="@Model.Email" disabled>
+                        <a href="#" class="btn-primary ms-2 edit-button">Edit</a>
+                        <a href="#" class="btn-success ms-2 save-button" style="display: none;">Save</a>
+                        <a href="#" class="btn-secondary ms-2 cancel-button" style="display: none;">Cancel</a>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="mobile" class="text-primary">Mobile:</label>
+                    <div class="d-flex">
+                        <span class="view-mode">@Model.PhoneNumber</span>
+                        <input type="text" class="edit-mode" id="phoneNumber" value="@Model.PhoneNumber" disabled>
+                        <a href="#" class="btn-primary ms-2 edit-button">Edit</a>
+                        <a href="#" class="btn-success ms-2 save-button" style="display: none;">Save</a>
+                        <a href="#" class="btn-secondary ms-2 cancel-button" style="display: none;">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>$(document).ready(function () {
+            var inputElement = document.getElementById("firstName");
+            inputElement.style.display = 'none';
+
+            document.getElementById("lastName").style.display = 'none';
+
+            document.getElementById("email").style.display = 'none';
+
+            document.getElementById("phoneNumber").style.display = 'none';
+
+            $(".edit-button").on("click", function (e) {
+                e.preventDefault();
+
+                var $container = $(this).parent();
+                $container.find(".view-mode").hide();
+                $container.find(".edit-mode").prop("disabled", false).show();
+                $container.find(".edit-button").hide();
+                $container.find(".save-button").show();
+                $container.find(".cancel-button").show();
+            });
+
+            $(".cancel-button").on("click", function (e) {
+                e.preventDefault();
+
+                var $container = $(this).parent();
+                $container.find(".view-mode").show();
+                $container.find(".edit-mode").prop("disabled", true).hide();
+                $container.find(".edit-button").show();
+                $container.find(".save-button").hide();
+                $container.find(".cancel-button").hide();
+            });
+
+            $(".save-button").on("click", function (e) {
+                e.preventDefault();
+
+                var $container = $(this).parent();
+                var newValue = $container.find(".edit-mode").val();
+                var field = $container.find(".edit-mode").attr("id");
+
+                // Send the updated value to the server via AJAX
+                $.ajax({
+                    url: "/Customer/CustomerAccount/SaveProfileField",
+                    method: "POST",
+                    data: { field: field, value: newValue },
+                    success: function () {
+                        // Update the view mode with the new value
+                        $container.find(".view-mode").text(newValue);
+                        $container.find(".edit-mode").prop("disabled", true);
+                        $container.find(".cancel-button").click(); // Hide edit controls
+
+                    },
+                    error: function () {
+                        // Handle errors as needed
+                    }
+                });
+            });
+
+        });</script>-->
+    @*For client side validation we have inbuilt script file*@
+    @*//////////*@
+    @*@section Scripts{*@
+    <!--@{
+            <partial name="_ValidationScriptsPartial" />
+        }
+
+    }-->

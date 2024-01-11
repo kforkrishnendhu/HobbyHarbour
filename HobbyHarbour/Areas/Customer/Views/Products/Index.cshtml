@@ -1,0 +1,216 @@
+﻿@{
+    Layout = "_CustomerLayout";
+}
+@model HobbyHarbour.ViewModels.ProductIndexViewModel
+
+@{
+    ViewData["Title"] = "Products";
+}
+@*<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />*@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-hVFv8W2+8vxJ5tvatgJt6nETT6I8aOMI3ukWx+JXqPw9LlMT/B/fk3t2JRtPU+JcGX0lOeF+71ifUssaeDi8yQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+<style>
+    /* CSS for image size and card height */
+    .card-img-top {
+        max-height: 200px;
+        object-fit: contain;
+        width: 100%;
+    }
+
+    .card {
+        max-height: 400px; /* Set a fixed height for the cards */
+        overflow: hidden;
+        padding-top: 20px;
+    }
+
+    .category-images {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .category-image-container {
+        text-align: center;
+        flex: 1; /* Distribute the available space equally */
+        margin-right: 20px; /* Add spacing between category images */
+    }
+
+    .category-image {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-bottom: 5px;
+        object-fit: cover;
+    }
+
+    .category-name {
+        font-size: 14px;
+    }
+
+    .pad {
+        padding-left: 40px;
+        padding-right: 40px;
+        padding-top: 20px;
+        padding-bottom: 50px;
+    }
+
+    .card-title {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .sidebar {
+        width: 200px;
+        height: 800px;
+        float: left;
+        margin-right: 20px;
+    }
+
+    .filter-container {
+        margin-bottom: 20px;
+    }
+
+    .box {
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin-bottom: 20px;
+        background-color: #f9f9f9;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+</style>
+
+<div class="container">
+
+    <div class="row">
+        <form method="get">
+            <div class="col-md-3">
+                <div class="sidebar box">
+                    <div class="filter-container">
+                        <h4 style="margin-bottom:10px;">Category Filter</h4>
+                        @foreach (var category in ViewBag.CategoryList)
+                        {
+                            <label class="form-check">
+                                <input type="radio" name="selectedCategory" value="@category.Value" class="form-check-input">
+                                @category.Text
+                            </label>
+                            <br />
+                        }
+
+                        <!-- Include an "All" option if needed -->
+                        <label class="form-check">
+                            <input type="radio" name="selectedCategory" value="" class="form-check-input">
+                            All
+                        </label>
+                    </div>
+
+                    <div class="filter-container">
+                        <h4 style="margin-bottom:10px;">Price Filter</h4>
+
+                        <label>
+                            <input type="radio" name="priceRange" value="0-50">
+                            $0 - $50
+                        </label>
+                        <br />
+                        <label>
+                            <input type="radio" name="priceRange" value="50-100">
+                            $50 - $100
+                        </label>
+                        <br />
+                        <label>
+                            <input type="radio" name="priceRange" value="100-150">
+                            $100 - $150
+                        </label>
+                        <br />
+                        <label>
+                            <input type="radio" name="priceRange" value="150+">
+                            $150+
+                        </label>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary" type="submit">Apply Filters</button>
+                    </div>
+
+                    <!-- Add more filter options as needed -->
+
+                </div>
+            </div>
+        </form>
+        <div class="col-md-9 box">
+            <div class="row">
+                <div class="col-md-12" style="padding:10px;">
+                    <div class="mb-3 position-relative" style="position: relative; display:flex; align-items:center;">
+                        <input type="text" id="searchInput" name="search" class="form-control" placeholder="Search...">
+                        <i id="searchIcon" class="fa fa-search position-absolute top-50 end-0 translate-middle-y" style="right: 10px; margin-right: 0; transform: translate(0%, -50%); position: absolute; top: 50%; cursor: pointer;"></i>
+                    </div>
+
+                </div>
+            </div>
+            @if (Model.Products.Count > 0)
+            {
+                <div class="row">
+                    @foreach (var product in Model.Products)
+                    {
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-0 shadow border-top border-5 rounded">
+                                @if (product.Images != null && product.Images.Any())
+                                {
+                                    <img src="@product.Images.FirstOrDefault().ImageUrl" class="card-img-top" alt="Product Image">
+                                }
+                                else
+                                {
+                                    <!-- Default image or placeholder when no images are available -->
+                                    <img src="~/productImages/images/placeholder.png" id="show-img" class="card-img-top">
+                                }
+
+                                <div class="card-body" style="margin-top:20px;">
+                                    <h5 class="card-title h5 text-dark opacity-75 text-center text-uppercase">@product.ProductName</h5>
+                                    <p class="card-text text-center">Price: $@product.Price</p>
+                                    <p class="card-text text-center" style="margin-top:10px;">Category: @product.Category.CategoryName</p>
+                                </div>
+                                <div class="card-footer text-center" style="margin-top:10px;">
+                                    <a href="@Url.Action("Details", "CustomerHome", new { id = product.ProductID })" class="btn btn-primary btn-block bg-gradient border-0">Details</a>
+
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- Display pagination controls -->
+                <div class="text-center">
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            @for (int i = 1; i <= Model.PageInfo.TotalPages; i++)
+                            {
+                                <li class="page-item @(i == Model.PageInfo.CurrentPage ? "active" : "")">
+                                    <a class="page-link" href="@Url.Action("Index", new { page = i, selectedCategory=ViewBag.selectedCategory, priceRange=ViewBag.priceRange, search=ViewBag.search })">@i</a>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
+                </div>
+            }
+            else
+            {
+                <p style="border: 2px solid #ddd; text-align: center; margin:10px;">No matching products.</p>
+            }
+        </div>
+
+
+
+    </div>
+</div>
+
+<script>
+    // Attach click event to the search icon
+    document.getElementById('searchIcon').addEventListener('click', function() {
+        // Get the search input value
+        var searchValue = document.getElementById('searchInput').value;
+
+        // Redirect to the Index action with the search parameter
+        window.location.href = '@Url.Action("Index")' + '?search=' + encodeURIComponent(searchValue);
+    });
+</script>

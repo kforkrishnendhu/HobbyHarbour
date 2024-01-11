@@ -1,0 +1,316 @@
+﻿@{
+    Layout = "_CustomerLayout";
+}
+@model HobbyHarbour.ViewModels.CheckoutViewModel
+
+<style type="text/css">
+    .user-identity {
+        background-color: #f8f9fa; /* Set your desired background color */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Style for the accordion headers (tabs) */
+    .accordion-header {
+        background-color: #e6cfe2;
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    /* Style for the accordion content (hidden by default) */
+    .accordion-content {
+        display: none;
+        padding: 10px;
+    }
+
+    .selected-header {
+        background-color: #66406c;
+        color: #fff;
+    }
+    /* Add space between accordion tabs */
+    .accordion-tab {
+        margin-bottom: 10px;
+    }
+
+    /* Slow down the accordion open/close animation */
+    .accordion-content {
+        display: none;
+        padding: 10px;
+        transition: display 0.3s ease;
+    }
+
+    .payment-options {
+        background-color: #f8f9fa; /* Set your desired background color */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .payment-option {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        padding: 10px;
+        background-color: #ffffff; /* Set your desired background color */
+        border-radius: 8px;
+        transition: background-color 0.3s ease;
+        cursor: pointer;
+    }
+
+        .payment-option:hover {
+            background-color: #f0f0f0; /* Set your desired hover background color */
+        }
+
+    .payment-icon {
+        font-size: 24px;
+        margin-right: 10px;
+    }
+    .pad {
+        padding: 10px;
+    }
+</style>
+<div class="container">
+    <h2 class="text-center pad">Checkout</h2>
+    <div id="cart-items">
+        <div class="row">
+            <div class="col-md-8">
+
+                <div class="checkout-accordion">
+                    <!-- Accordion Tab 1: User Login -->
+                    <div class="accordion-tab">
+                        <div class="accordion-header">
+                            <h4>LOGIN</h4>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="user-identity">
+                                <!-- Add user login form or check if the user is already logged in -->
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <p><strong>You are already logged in as<span style="color:blue; text-decoration:underline;"> @User.Identity.Name</span>.</strong></p>
+                                }
+                                else
+                                {
+                                    <p>Please log in to proceed.</p>
+                                    <!-- Add a login form or a link to the login page -->
+                                    <a href="/Identity/Account/Login" class="btn btn-primary">Log In</a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Accordion Tab 2: Order Summary -->
+                    <div class="accordion-tab">
+                        <div class="accordion-header">
+                            <h4>ORDER SUMMARY</h4>
+                        </div>
+                        <div class="accordion-content">
+                            <!-- Render order summary as a partial view -->
+                            @Html.Partial("_OrderSummary", Model.OrderSummaryModel)
+                        </div>
+                    </div>
+
+                    <!-- Accordion Tab 3: Add new address -->
+                    <div class="accordion-tab">
+                        <div class="accordion-header">
+                            <h4>ADD NEW ADDRESS</h4>
+                        </div>
+                        <div class="accordion-content">
+                            <!-- Render order summary as a partial view -->
+                            @Html.Partial("_AddAddress", Model.AddAddressModel)
+                        </div>
+                    </div>
+
+                    <!-- Accordion Tab 4: Delivery Address -->
+                    <div class="accordion-tab">
+                        <div class="accordion-header">
+                            <h4>SELECT DELIVERY ADDRESS</h4>
+                        </div>
+                        <div class="accordion-content">
+                            <!-- Render Delivery address as a partial view -->
+                            @Html.Partial("_DeliveryAddress", Model.DeliveryAddressModel)
+                        </div>
+                    </div>
+
+                    <!-- Accordion Tab 5: Payment Options -->
+                    <div class="accordion-tab">
+                        <div class="accordion-header">
+                            <h4>PAYMENT OPTION</h4>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="payment-options">
+                                <h4>Select Payment Option</h4>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="payment-option">
+                                            <input type="radio" id="creditCard" name="paymentMethod" value="onlinePayment">
+                                            <label for="creditCard">
+                                                <i class="bi bi-credit-card-fill payment-icon"></i>
+                                                Online Payment
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="payment-option">
+                                            <input type="radio" id="wallet" name="paymentMethod" value="wallet">
+                                            <label for="wallet">
+                                                <i class="bi bi-bank2 payment-icon"></i>
+                                                Wallet
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="payment-option">
+                                            <input type="radio" id="cashOnDelivery" name="paymentMethod" value="cashOnDelivery">
+                                            <label for="cashOnDelivery">
+                                                <i class="bi bi-cash payment-icon"></i>
+                                                Cash on Delivery
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="CouponCode">Coupon Code:</label>
+                                    <input type="text" class="form-control" id="couponCode" name="couponCode">
+                                    <span asp-validation-for="CouponCode" class="text-danger"></span>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card pad" style="background: #e6cfe2;">
+                    <div class="card-body pad">
+                        <h3 class="card-title text-center pad">Price Details</h3>
+                        <p>Total Items: @Model.OrderSummaryModel.Count</p>
+                        <p>Total Price:<span class="text-right"> $@(Model.OrderSummaryModel.Sum(item => (decimal)(item.Quantity * item.Product.Price)))</span></p>
+                        <p>Delivery Charge: $10.00</p>
+                        <hr>
+                        <h4>Total Amount: $@(Model.OrderSummaryModel.Sum(item => (decimal)(item.Quantity * item.Product.Price)) + 10.00M)</h4>
+                    </div>
+                    <hr>
+                    <form id="myForm" asp-controller="Checkout" asp-action="PlaceOrder" method="post">
+                        @Html.AntiForgeryToken()
+                        <div class="text-center pad">
+                            <button type="submit" class="btn btn-primary btn-lg" id="placeOrderButton">Place Order</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const tabs = document.querySelectorAll(".accordion-tab");
+
+        tabs.forEach((tab) => {
+            const header = tab.querySelector(".accordion-header");
+            const content = tab.querySelector(".accordion-content");
+
+            header.addEventListener("click", () => {
+                // Close any open tabs
+                tabs.forEach((otherTab) => {
+                    const otherContent = otherTab.querySelector(".accordion-content");
+                    if (otherContent.style.display === "block") {
+                        otherContent.style.display = "none";
+                        otherTab.querySelector(".accordion-header").classList.remove("selected-header");
+                    }
+                });
+
+                // Open the clicked tab
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                    header.classList.remove("selected-header");
+                } else {
+                    content.style.display = "block";
+                    header.classList.add("selected-header");
+                }
+            });
+        });
+
+        // Find and click the header of the delivery address accordion tab
+        const deliveryTab = document.querySelector(".accordion-tab:nth-child(4)"); // Assuming the delivery address tab is the fourth tab
+        const deliveryHeader = deliveryTab.querySelector(".accordion-header");
+        deliveryHeader.click();
+
+        $("#myForm").submit(function (event) {
+            event.preventDefault(); // Add this line
+
+            // Check if a delivery address is selected
+            var selectedAddressId = $('input[name="selectedAddress"]:checked').val();
+            if (!selectedAddressId) {
+                alert("Please select a delivery address.");
+                return;
+            }
+
+            // Check if a payment method is selected
+            var selectedPaymentMethod = $('input[name="paymentMethod"]:checked').val();
+            if (!selectedPaymentMethod) {
+                alert("Please select a payment method.");
+                return;
+            }
+
+            // If all conditions are met, proceed with placing the order
+            var AddressId = getSelectedAddressId();
+            var PaymentMethod = getSelectedPaymentMethod();
+            // Make an AJAX request to PlaceOrder action
+            $.ajax({
+                url: "/Customer/Checkout/PlaceOrder",
+                type: "POST", 
+                data: {
+                    sAddressId: AddressId,
+                    paymentMethod: PaymentMethod,
+                    couponCode: $("#couponCode").val()
+                },
+                headers: {
+                    RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function (response) {
+
+                    if (!response.success) {
+                        alert(response.error);
+                    } else {
+                        window.location.href = response.redirectUrl;
+                        
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX request failed", xhr.responseText);
+                    // Your error handling code
+                }
+            });
+
+            // Prevent the default form submission
+            return false;
+            //// You can redirect to the action method that handles order placement
+            //window.location.href = "/Customer/Checkout/PlaceOrder";
+        });
+
+        function getSelectedAddressId() {
+            // Assuming you have radio buttons for addresses, get the selected one
+            return $('input[name="selectedAddress"]:checked').val();
+        }
+
+        function getSelectedPaymentMethod() {
+            // Assuming you have radio buttons for payment methods, get the selected one
+            return $('input[name="paymentMethod"]:checked').val();
+        }
+    });
+</script>
+
+@*For client side validation we have inbuilt script file*@
+@*//////////*@
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+}

@@ -1,0 +1,86 @@
+﻿@{
+    Layout = "_AdminLayout";
+}
+@model Product
+
+@{
+    ViewData["Title"] = "Create Product";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+<div class="container">
+    <h2 class="text-center">Create New Product</h2>
+
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-10">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="ProductName" class="control-label">Product Name</label>
+                    <input asp-for="ProductName" class="form-control" />
+                    <span asp-validation-for="ProductName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label">Description</label>
+                    <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Price"></label>
+                    <input asp-for="Price" class="form-control" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="StockQuantity"></label>
+                    <input asp-for="StockQuantity" class="form-control" />
+                    <span asp-validation-for="StockQuantity" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="CategoryID"></label>
+                    <select name="CategoryID" asp-for="CategoryID" asp-items="ViewBag.CategoryList" class="form-select form-control">
+                        <option value="" disabled selected> --select category-- </option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Images">Upload Images</label>
+                    <input type="file" name="Images" multiple class="form-control" />
+                </div>
+                <!-- Hidden field for ImagesToDelete -->
+                <!--<input asp-for="ImagesToDelete" type="hidden" />-->
+
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                </div>
+            </div>
+            <div class="col-2">
+                @if (Model.Images != null && Model.Images.Any())
+                {
+                    <img src="@Model.Images.First().ImageUrl" width="100%"
+                         style="border-radius:5px; border:1px solid #bbb9b9" />
+                }
+            </div>
+        </div>
+
+    </form>
+
+    <div class="">
+
+    </div>
+</div>
+
+@*For client side validation we have inbuilt script file*@
+@*//////////*@
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+}

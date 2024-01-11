@@ -1,0 +1,47 @@
+﻿@{
+    Layout = "_CustomerLayout";
+}
+@model MerchantOrder
+@using System.Globalization
+
+<style>
+
+    .success-container {
+        text-align: center;
+        padding: 20px;
+        background-color: #e6cfe2;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        color: #28a745;
+    }
+
+    p {
+        color: #333;
+    }
+
+    .order-details {
+        margin-top: 20px;
+    }
+</style>
+
+<div class="success-container">
+    <h1>Payment Successful</h1>
+    <p>Thank you for your purchase!</p>
+
+    <div class="order-details">
+        <p><strong>Order ID:</strong> @Model.OrderId</p>
+        <p><strong>Transaction ID:</strong> @Model.TransactionId</p>
+        @{
+            var cultureInfo = new CultureInfo("en-IN"); // Change "en-IN" to your desired culture
+            var formatInfo = cultureInfo.NumberFormat;
+        }
+
+        <p style="margin-bottom: 10px"><strong>Amount:</strong> @((Model.Amount / 100).ToString("C", formatInfo))</p>
+
+        <a href="@Url.Action("Orders", "CustomerHome")" class="btn btn-primary">View Your Orders</a>
+
+    </div>
+</div>

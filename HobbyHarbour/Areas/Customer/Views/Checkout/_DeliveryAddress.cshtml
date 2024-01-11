@@ -1,0 +1,97 @@
+﻿
+@model List<Address>
+
+@foreach (var address in Model)
+{
+    <div class="row">
+        <div class="col">
+            <div class="address-box">
+                <label class="address-label">
+                    <input class="address-radio" type="radio" name="selectedAddress" value="@address.AddressID" />
+                    <div class="address-details">
+                        <p><strong>@address.FullName&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@address.PhoneNumber</strong></p>
+                        <p>@address.StreetAddress, @address.City, @address.State - @address.PostalCode, @address.Country</p>
+                        @Html.AntiForgeryToken()
+                    </div>
+                    @*<div class="actions">
+                        <a href="#" class="btn btn-primary edit-button" data-address-id="@address.AddressID">Edit</a>
+                    </div>*@
+                </label>
+                <button class="btn btn-warning deliver-button">Deliver Here</button>
+            </div>
+            <div class="edit-address-container" id="edit-address-@address.AddressID"></div>
+
+        </div>
+    </div>
+}
+
+
+
+<style>
+    .row {
+        margin-right: -5px;
+        margin-left: -5px;
+    }
+
+    .address-box {
+        align-items: center;
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin-bottom: 20px;
+        background-color: #f9f9f9;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .actions {
+        margin-top: 15px;
+    }
+
+    /* Custom CSS for address alignment */
+    .address-label {
+        display: flex;
+    }
+
+    .address-box:hover {
+        background-color: #f5f5f5;
+    }
+
+    .address-details {
+        flex-grow: 1;
+        padding: 0 10px;
+    }
+
+        .address-details p {
+            margin: 0;
+        }
+
+    .actions {
+        margin-top: 10px;
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/js/bootstrap.min.js"></script>
+
+<script>
+$(document).ready(function () {
+        $('.deliver-button').hide(); // Hide all "Deliver Here" buttons
+        $('input[type="radio"]').change(function () {
+            $('.deliver-button').hide(); // Hide all "Deliver Here" buttons
+            if ($(this).is(':checked')) {
+                $(this).closest('.row').find('.deliver-button').show(); // Show the button for the selected address
+            }
+        });
+    $('.deliver-button').click(function () {
+        var deliveryAccordionTab = $(this).closest('.accordion-tab');
+        deliveryAccordionTab.find('.accordion-content').hide();
+        deliveryAccordionTab.find('.accordion-header').removeClass('selected-header');
+
+        // Trigger click event on the header of the payment accordion tab to open it
+        var paymentAccordionTab = deliveryAccordionTab.next(); // Assuming the payment tab is the next one in order
+        paymentAccordionTab.find('.accordion-header').trigger('click');
+    });
+
+});
+
+    </script>
+

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 25.0.1706.5
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HobbyHarbour", "HobbyHarbour\HobbyHarbour.csproj", "{6D0C90FD-5492-488A-9026-CE6B43B9799A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6D0C90FD-5492-488A-9026-CE6B43B9799A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D0C90FD-5492-488A-9026-CE6B43B9799A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D0C90FD-5492-488A-9026-CE6B43B9799A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D0C90FD-5492-488A-9026-CE6B43B9799A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1B6EB89C-2473-4B7F-A411-095B03295416}
+	EndGlobalSection
+EndGlobal

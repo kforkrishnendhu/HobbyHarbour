@@ -1,0 +1,20 @@
+﻿@*@page
+@{
+    if (User.IsInRole("Admin"))
+    {
+        Layout = "_AdminLayout"; // Use the admin layout
+    }
+    else if (User.IsInRole("Customer"))
+    {
+        Layout = "_UserLayout"; // Use the user layout
+    }
+    else
+    {
+        Layout = "_Layout"; // Use the default layout
+    }
+}*@
+
+
+@{
+        Layout = "_Layout";
+    }

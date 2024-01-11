@@ -1,0 +1,93 @@
+﻿@model Coupon
+@{
+    ViewData["Title"] = "Delete Coupon";
+    Layout = "_AdminLayout";
+}
+
+<div class="container">
+
+    <div style="background-color: #e3d4e6; padding:10px;">
+        <h4 style="margin-bottom:10px;">Are you sure you want to delete this coupon?</h4>
+        <dl class="row">
+            <dt class="col-sm-2">
+                Coupon ID
+            </dt>
+            <dd class="col-sm-10">
+                @Model.CouponID
+            </dd>
+
+            <dt class="col-sm-2">
+                Coupon Code
+            </dt>
+            <dd class="col-sm-10">
+                @Model.Code
+            </dd>
+
+            <dt class="col-sm-2">
+                Discount Type
+            </dt>
+            <dd class="col-sm-10">
+                @Model.DiscountType
+            </dd>
+
+            <dt class="col-sm-2">
+                Discount Value
+            </dt>
+            <dd class="col-sm-10">
+                @Model.DiscountValue
+            </dd>
+
+            <dt class="col-sm-2">
+                Minimum Cart Amount
+            </dt>
+            <dd class="col-sm-10">
+                @Model.MinimumCartAmount
+            </dd>
+
+            <dt class="col-sm-2">
+                Maximum Cart Amount
+            </dt>
+            <dd class="col-sm-10">
+                @Model.MaximumCartAmount
+            </dd>
+
+            <dt class="col-sm-2">
+                Expiry Date
+            </dt>
+            <dd class="col-sm-10">
+                @Model.ExpiryDate.ToShortDateString()
+            </dd>
+
+            <dt class="col-sm-2">
+                Is Active
+            </dt>
+            <dd class="col-sm-10">
+                @Model.IsActive
+            </dd>
+
+            <dt class="col-sm-2">
+                Usage Limit
+            </dt>
+            <dd class="col-sm-10">
+                @Model.UsageLimit
+            </dd>
+
+            <dt class="col-sm-2">
+                Usage Count
+            </dt>
+            <dd class="col-sm-10">
+                @Model.UsageCount
+            </dd>
+        </dl>
+
+        <form asp-action="Delete" method="post">
+            <input type="hidden" asp-for="CouponID" />
+            <div class="form-group">
+                <button type="submit" class="btn btn-danger">Delete</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+

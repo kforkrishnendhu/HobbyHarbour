@@ -1,0 +1,125 @@
+﻿@model HobbyHarbour.ViewModels.DashboardViewModel
+@{
+    Layout = "_AdminLayout";
+}
+
+@using System.Globalization
+
+<style>
+    /* Apply styling to the chart containers */
+    .chart-container {
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        width: 500px;
+        height: 400px;
+    }
+    /* Position the charts in a triangular layout */
+    #salesLineChartContainer {
+        top: 0;
+        left: 0;
+    }
+
+    #paymentMethodPieChartContainer {
+        top: 0;
+        right: 0;
+    }
+
+    #productSalesBarChartContainer {
+        bottom: 0;
+        left: 0;
+    }
+    .pad {
+        padding: 8px 20px;
+        background-color: #e6cfe2;
+    }
+</style>
+
+<!-- Include Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="container">
+    <form method="get">
+        <div class="form-row" style="padding:20px;">
+            <div class="form-group col-md-4">
+                <label for="selectedYear">Select Year:</label>
+                <select class="pad" id="selectedYear" name="selectedYear">
+                    @for (int year = DateTime.Now.Year; year >= 2020; year--)
+                    {
+                        <option value="@year" selected="@{ if(Model.SelectedYear == year) { <text>selected</text>; } }">
+                            @year
+                        </option>
+                    }
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="selectedMonth">Select Month:</label>
+                <select class="pad" id="selectedMonth" name="selectedMonth">
+                    @for (int month = 1; month <= 12; month++)
+                    {
+                        <option value="@month" selected="@{ if(Model.SelectedMonth == month) { <text>selected</text>; } }">
+                            @CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month)
+                        </option>
+                    }
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <button style="padding: 8px 20px;" class="btn btn-primary" type="submit">Apply Filters</button>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-md-6">
+            <div id="salesLineChartContainer" class="chart-container">
+                <h3>Sales Line Chart</h3>
+                <canvas id="salesLineChart" width="400px" height="200px"></canvas>
+                <script>
+                var salesLineChartConfig = @Html.Raw(Model.SalesLineChartData);
+                console.log(salesLineChartConfig);
+                var salesLineChartCanvas = document.getElementById('salesLineChart').getContext('2d');
+                new Chart(salesLineChartCanvas, {
+                    type: 'line',
+                    data: salesLineChartConfig
+                });
+                </script>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="paymentMethodPieChartContainer" class="chart-container">
+                <h3>Payment Method Pie Chart</h3>
+                <canvas id="paymentMethodPieChart" style="max-height:330px" width="400px" height="200px"></canvas>
+                <script>
+                var paymentMethodPieChartConfig = @Html.Raw(Model.PaymentMethodPieChartData);
+                var paymentMethodPieChartCanvas = document.getElementById('paymentMethodPieChart').getContext('2d');
+                new Chart(paymentMethodPieChartCanvas, {
+                    type: 'pie',
+                    data: paymentMethodPieChartConfig
+                });
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col" style="display: flex; justify-content: center;">
+            <div id="productSalesBarChartContainer" class="chart-container">
+                <h3>Product Sales Bar Chart</h3>
+                <canvas id="productSalesBarChart" width="400px" height="200px"></canvas>
+                <script>
+                var productSalesBarChartConfig = @Html.Raw(Model.ProductSalesBarChartData);
+                var productSalesBarChartCanvas = document.getElementById('productSalesBarChart').getContext('2d');
+                new Chart(productSalesBarChartCanvas, {
+                    type: 'bar',
+                    data: productSalesBarChartConfig
+                });
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
